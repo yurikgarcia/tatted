@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconText: {
-    fontSize: 12, // Adjust the font size as needed
+    fontSize: 12, 
   },
 });
 

@@ -3,6 +3,10 @@ import { Avatar, Button, Card } from 'react-native-paper';
 import { Image, ScrollView, StyleSheet, View, Text, Dimensions } from 'react-native';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import ArtistPage from './ArtistPage';
+
+
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -51,9 +55,10 @@ const styles = StyleSheet.create({
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
-function Home() {
+function Home( ) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [1, 2, 3, 4, 5]; // Replace with your image data
+  const navigation = useNavigation();
 
   const handleGestureEvent = (event) => {
     if (event.nativeEvent.state === State.END) {
@@ -109,14 +114,15 @@ function Home() {
 
             <Card.Content>
               <Button 
-                mode="elevated"
-                buttonColor='#504a4b'
-                textColor='#ffffff'
-                style={{ marginTop: 5 }}
-                onPress={() => console.log('Pressed')}
-              >
+                  mode="elevated"
+                  buttonColor='#504a4b'
+                  textColor='#ffffff'
+                  style={{ marginTop: 5 }}
+                  onPress={() => navigation.navigate('ArtistPage')}
+                  // Replace 'ArtistPage' with the actual screen name
+                >
                   Book Appointment
-              </Button>
+                </Button>
             </Card.Content>
 
               

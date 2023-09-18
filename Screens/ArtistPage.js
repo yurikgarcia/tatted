@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, SafeAreaView } from 'react-native';
 import { SegmentedButtons } from 'react-native-paper';
 
 function ArtistPage() {
-  const [value, setValue] = React.useState('');
+  const [artistSegvalue, setArtistSegValue] = React.useState('info'); // Initialize with 'info'
 
   return (
     <View style={styles.container}>
@@ -22,8 +22,8 @@ function ArtistPage() {
         {/* Your content goes here */}
         <View style={styles.segContainer}>
           <SegmentedButtons
-            value={value}
-            onValueChange={setValue}
+            value={artistSegvalue}
+            onValueChange={setArtistSegValue}
             buttons={[
               {
                 value: 'info',
@@ -36,6 +36,21 @@ function ArtistPage() {
             ]}
           />
         </View>
+        {/* Content takes up the bottom 50% of the screen */}
+        <View style={styles.bottomContent}>
+          {artistSegvalue === 'info' && (
+            <View 
+              style={styles.infoContent}
+            >
+              <Text>Info content goes here</Text>
+            </View>
+          )}
+          {artistSegvalue === 'reviews' && (
+            <View style={styles.reviewsContent}>
+              <Text>Review content goes here</Text>
+            </View>
+          )}
+        </View>
       </SafeAreaView>
     </View>
   );
@@ -44,37 +59,52 @@ function ArtistPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff', // Adjust background color as needed
   },
   avatarContainer: {
-    // flex: 0.15, // 15% of the screen height
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    // backgroundColor: '#504a4b', // Adjust background color as needed
+    marginTop: 5,
+    // Styles for the avatar container
   },
   avatar: {
-    width: 120, // Adjust the width and height of the avatar circle as needed
+    width: 120,
     height: 120,
-    borderRadius: 60, // Make it a circle by setting border radius to half of width/height
-    overflow: 'hidden', // Clip the image within the circle
+    borderRadius: 60,
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: '35%',
   },
   avatarImage: {
     width: '100%',
     height: '100%',
   },
   name: {
-    marginTop: 10, // Adjust spacing between avatar and name as needed
-    fontSize: 16, // Adjust font size as needed
+    marginLeft: '37%',
+    marginTop: 5,
+    marginBottom: 5,
   },
   content: {
-    flex: 0.85, // 85% of the screen height for content
-    // Add styling for content section as needed
+    flex: 1,
+    // Styles for content section
   },
   segContainer: {
+    // Styles for segmented buttons container
+  },
+  bottomContent: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '99%',
+    backgroundColor: 'white', // Adjust the background color as needed
+  },
+  infoContent: {
     flex: 1,
-    alignItems: 'center', // Center the SegmentedButtons horizontally
-    marginTop: 10
+
+    // Styles for info content
+  },
+  reviewsContent: {
+    flex: 1,
+    // Styles for reviews content
   },
 });
 

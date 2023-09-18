@@ -11,7 +11,7 @@ function Login({ navigation }) {
   const [segButtonValue, setSegButtonValue] = React.useState('login');
   const [isArtistSwitchOn, setIsArtistSwitchOn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);//state that allows the user to show imputed password
-  const primaryColor = '#355E3B';
+  const primaryColor = '#504a4b';
   const [login, setLogin] = React.useState({
     email: '',
     password: '',

@@ -48,7 +48,7 @@ const AppbarWithNavigation = () => {
         <TouchableOpacity onPress={navigateToSearch} style={styles.iconContainer}>
           <View style={styles.iconTextContainer}>
             <MaterialCommunityIcons name="artstation" size={24} color="black" />
-            <Text style={styles.iconText}>Art</Text>
+            <Text style={styles.iconText}>Artist</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity onPress={navigateToSettings} style={styles.iconContainer}>

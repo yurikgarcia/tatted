@@ -39,19 +39,28 @@ const AppbarWithNavigation = () => {
             <Text style={styles.iconText}>Home</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToLogin} style={styles.iconContainer}>
+        <TouchableOpacity
+          onPress={navigateToLogin}
+          style={styles.iconContainer}
+        >
           <View style={styles.iconTextContainer}>
             <MaterialCommunityIcons name="login" size={24} color="black" />
             <Text style={styles.iconText}>Login</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToSearch} style={styles.iconContainer}>
+        <TouchableOpacity
+          onPress={navigateToSearch}
+          style={styles.iconContainer}
+        >
           <View style={styles.iconTextContainer}>
             <MaterialCommunityIcons name="artstation" size={24} color="black" />
             <Text style={styles.iconText}>Artist</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={navigateToSettings} style={styles.iconContainer}>
+        <TouchableOpacity
+          onPress={navigateToSettings}
+          style={styles.iconContainer}
+        >
           <View style={styles.iconTextContainer}>
             <MaterialCommunityIcons name="cog" size={24} color="black" />
             <Text style={styles.iconText}>Settings</Text>
@@ -103,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   iconText: {
-    fontSize: 12, 
+    fontSize: 12,
   },
 });
 

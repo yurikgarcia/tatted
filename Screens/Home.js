@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ArtistPage from "./ArtistPage";
 
+
 const windowWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
@@ -106,7 +107,7 @@ function Home() {
             <View style={styles.cardContent}>
               <View style={styles.cardTop}>
                 <View style={styles.circleImage}>
-                  <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+                  <Card.Cover source={require("../assets/artist1.jpg")} />
                 </View>
                 <Card.Title
                   title="Yurik Garcia"
@@ -160,7 +161,7 @@ function Home() {
             <View style={styles.cardContent}>
               <View style={styles.cardTop}>
                 <View style={styles.circleImage}>
-                  <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+                <Card.Cover source={require("../assets/artist2.jpg")} />
                 </View>
                 <Card.Title
                   title="Cantinflas Garcia"

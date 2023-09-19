@@ -12,7 +12,7 @@ import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ArtistPage from "./ArtistPage";
-
+import artist1 from "../assets/artist1.jpg";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -161,7 +161,7 @@ function Home() {
             <View style={styles.cardContent}>
               <View style={styles.cardTop}>
                 <View style={styles.circleImage}>
-                <Card.Cover source={require("../assets/artist2.jpg")} />
+                  <Card.Cover source={require("../assets/artist1.jpg")} />
                 </View>
                 <Card.Title
                   title="Cantinflas Garcia"

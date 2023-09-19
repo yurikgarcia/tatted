@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { Appbar, SegmentedButtons } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-// Import FlatList
+import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native";
+import Review from "./Review";
 
 
 
@@ -20,6 +21,9 @@ function ArtistPage() {
   const [artistSegvalue, setArtistSegValue] = React.useState("info"); // Initialize with 'info'
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
+
+    const navigation = useNavigation();
+
 
   useEffect(() => {
     // Fetch random images for column 1
@@ -84,11 +88,11 @@ function ArtistPage() {
                 <TouchableOpacity style={styles.iconContainer}>
                   <View style={styles.iconTextContainer}>
                     <MaterialCommunityIcons
-                      name="account-remove-outline"
+                      name="account-plus-outline"
                       size={24}
                       color="black"
                     />
-                    <Text style={styles.iconText}>REMOVE</Text>
+                    <Text style={styles.iconText}>ADD</Text>
                   </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconContainer}>
@@ -107,6 +111,7 @@ function ArtistPage() {
                       name="star-outline"
                       size={24}
                       color="black"
+                      onPress={() => navigation.navigate("Review")}
                     />
                     <Text style={styles.iconText}>REVIEW</Text>
                   </View>

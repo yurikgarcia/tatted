@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Searchbar, Chip } from 'react-native-paper';
 import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
   const options = ['Distance', 'Star Rating']; // Add more options as needed
+  const [selectedOption, setSelectedOption] = useState(''); 
 
   return (
     <Modal
@@ -30,6 +32,8 @@ function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
               backgroundColor: 'lightgray', // Background color of the header
               paddingVertical: 10,
               paddingLeft: 16,
+              flexDirection: 'row',
+              justifyContent: 'space-between', // Align items to the right
             }}
           >
             <Text style={{ fontWeight: 'bold', fontSize: 18, marginLeft: 170 }}>SORT</Text>
@@ -38,11 +42,24 @@ function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
             <TouchableOpacity
               key={option}
               onPress={() => {
+                setSelectedOption(option.toLowerCase()); // Set the selected option
                 onSelect(option.toLowerCase());
                 onClose();
               }}
             >
-              <Text style={{ paddingVertical: 10, marginLeft: 10, fontSize: 16 }}>{option}</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between', // Align items to the right
+                  paddingVertical: 10,
+                  paddingHorizontal: 16,
+                }}
+              >
+                <Text style={{ fontSize: 16 }}>{option}</Text>
+                {selectedOption === option.toLowerCase() && (
+                  <Icon name="check" size={16} color="green" /> // Display a checkmark for the selected option
+                )}
+              </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -94,7 +111,8 @@ function Search() {
         <Chip
           mode="outlined"
           style={{
-            marginTop: 10,
+            marginTop: 20,
+            marginLeft: 5,
             width: 120, // Adjust the width as needed
             borderRadius: 20, // Make corners rounder
           }}

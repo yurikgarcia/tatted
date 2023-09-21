@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Chat from "./Screens/Chat";
+import LoadingScreen from "./Screens/LoadingScreen"; // Import the loading screen component
 import Home from "./Screens/Home";
 import Settings from "./Screens/Settings";
 import ArtistPage from "./Screens/ArtistPage";
 import Search from "./Screens/Search";
 import Login from "./Screens/Login";
 import Review from "./Screens/Review";
+import Chat from "./Screens/Chat";
 import { Provider, Appbar, useTheme } from "react-native-paper";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -62,32 +63,31 @@ const AppbarWithNavigation = () => {
 
 const App = () => {
   const theme = useTheme();
-  const [backgroundColor, setBackgroundColor] = useState("white");
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Function to toggle background color
-  const toggleBackgroundColor = () => {
-    setBackgroundColor(backgroundColor === "white" ? "black" : "white");
-  };
+  useEffect(() => {
+    // Simulate a loading delay (e.g., fetching data, initializing app)
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000); // Adjust the delay time as needed
+  }, []);
+
+  if (isLoading) {
+    // Display the loading screen while isLoading is true
+    return <LoadingScreen />;
+  }
 
   return (
     <Provider theme={theme}>
       <View style={styles.container}>
         <NavigationContainer theme={theme}>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName="Login">
+            <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="ArtistPage" component={ArtistPage} />
             <Stack.Screen name="Chat" component={Chat} />
-            <Stack.Screen name="Search">
-              {(props) => (
-                <Search
-                  {...props}
-                  toggleBackgroundColor={toggleBackgroundColor}
-                  backgroundColor={backgroundColor}
-                />
-              )}
-            </Stack.Screen>
+            <Stack.Screen name="Search" component={Search} />
             <Stack.Screen name="Settings" component={Settings} />
-            <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Review" component={Review} />
           </Stack.Navigator>
           <AppbarWithNavigation />
@@ -127,4 +127,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-

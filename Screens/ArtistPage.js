@@ -130,8 +130,8 @@ function ArtistPage() {
                 </TouchableOpacity>
               </Appbar>
               <Text style={{ color: styles.subHeading, fontWeight: 'bold', marginTop: 10, marginLeft: 5 }}>ABOUT</Text>
-              <Text style={styles.bodyText}> Que vuelta acere! Soy tremendo barbero paque tu sepas!</Text>
-              <Text style={styles.bodyText}> Aqui se hacen tremendos cortes de pelo y las mejores croquetas!</Text>
+              <Text style={styles.bodyText}> Que vuelta acere! Soy tremendo artista paque tu sepas!</Text>
+              <Text style={styles.bodyText}> Aqui se hacen tremendos tatuajes y vendemos mejores croquetas!</Text>
               <Text style={{ color: styles.subHeading, fontWeight: 'bold', marginTop: 10, marginLeft: 5 }}>TATTOO SHOP</Text>
               <Text style={styles.bodyText}> La Marca Tatuaje</Text>
               <Text style={styles.bodyText}> 6867 Calle Ocho</Text>

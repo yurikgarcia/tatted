@@ -1,15 +1,18 @@
 import React from "react";
 import { Button } from "react-native-paper";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, Image, Dimensions, } from "react-native";
 import { SegmentedButtons, TextInput } from "react-native-paper";
 import { Switch } from "react-native-paper";
 import { View, Text } from "react-native";
+import logoNoBack from "../assets/logoNoBack.png";
+
+const windowWidth = Dimensions.get("window").width;
 
 function Login({ navigation }) {
   const [segButtonValue, setSegButtonValue] = React.useState("login");
   const [isArtistSwitchOn, setIsArtistSwitchOn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false); //state that allows the user to show imputed password
-  const primaryColor = "#504a4b";
+  const primaryColor = "#0DBB80";
   const [login, setLogin] = React.useState({
     email: "",
     password: "",
@@ -24,6 +27,11 @@ function Login({ navigation }) {
   });
 
   const styles = StyleSheet.create({
+    avatarImage: {
+      width: windowWidth / 1,
+      height: 75,
+      marginHorizontal: 5,
+    },
     container: {
       flex: 1,
       justifyContent: "start",
@@ -40,10 +48,15 @@ function Login({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <SafeAreaView style={styles.container}>
-        <Text>TATTED</Text>
+        <Image
+            source={require("../assets/logoNoBack.png")}
+            style={styles.avatarImage}
+            resizeMode="contain"
+          />
         <SegmentedButtons
           value={segButtonValue}
           onValueChange={setSegButtonValue}
+          style={{ marginTop: 10 }}
           buttons={[
             { value: "login", label: "LOG IN" },
             { value: "sign-up", label: "SIGN UP" },

@@ -186,7 +186,7 @@ function Home() {
                           <Image
                             key={index}
                             source={{
-                              uri: `https://picsum.photos/700?random=${index}`,
+                              uri: `https://picsum.photos/600?random=${index}`,
                             }}
                             style={styles.image}
                           />

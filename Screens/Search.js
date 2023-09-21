@@ -18,35 +18,37 @@ import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 
 function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
-  const options = ["Distance", "Star Rating"]; // Add more options as needed
+  console.log("CustomBottomDrawer isVisible:", isVisible);
+
+  const options = ["Distance", "Star Rating"];
   const [selectedOption, setSelectedOption] = useState("");
 
   return (
     <Modal
       isVisible={isVisible}
-      swipeDirection={["down"]} // Enable swipe-down to close the drawer
+      swipeDirection={["down"]}
       onSwipeComplete={onClose}
       onBackdropPress={onClose}
       style={{
-        justifyContent: "flex-end", // Change this to 'flex-end'
-        margin: 0, // Change this to 0
+        justifyContent: "flex-end",
+        margin: 0,
       }}
     >
       <View
         style={{
           flex: 1,
-          maxHeight: 200, // Set the maximum height for the modal
-          backgroundColor: "white", // Background color of the view
+          maxHeight: 200,
+          backgroundColor: "white",
         }}
       >
         <ScrollView>
           <View
             style={{
-              backgroundColor: "lightgray", // Background color of the header
+              backgroundColor: "lightgray",
               paddingVertical: 10,
               paddingLeft: 16,
               flexDirection: "row",
-              justifyContent: "space-between", // Align items to the right
+              justifyContent: "space-between",
             }}
           >
             <Text style={{ fontWeight: "bold", fontSize: 18, marginLeft: 170 }}>
@@ -57,7 +59,7 @@ function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
             <TouchableOpacity
               key={option}
               onPress={() => {
-                setSelectedOption(option.toLowerCase()); // Set the selected option
+                setSelectedOption(option.toLowerCase());
                 onSelect(option.toLowerCase());
                 onClose();
               }}
@@ -65,14 +67,14 @@ function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
               <View
                 style={{
                   flexDirection: "row",
-                  justifyContent: "space-between", // Align items to the right
+                  justifyContent: "space-between",
                   paddingVertical: 10,
                   paddingHorizontal: 16,
                 }}
               >
                 <Text style={{ fontSize: 16 }}>{option}</Text>
                 {selectedOption === option.toLowerCase() && (
-                  <Icon name="check" size={16} color="green" /> // Display a checkmark for the selected option
+                  <Icon name="check" size={16} color="green" />
                 )}
               </View>
             </TouchableOpacity>
@@ -86,7 +88,7 @@ function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerVisible, setDrawerVisible] = useState(false);
-  const [sortBy, setSortBy] = useState(""); // Selected sorting criteria
+  const [sortBy, setSortBy] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [1, 2, 3, 4, 5];
   const navigation = useNavigation();
@@ -105,14 +107,14 @@ function Search() {
   const onChangeSearch = (query) => setSearchQuery(query);
 
   const handleSortByChange = (value) => {
-    // Handle the sort by change here, e.g., trigger sorting logic
     setSortBy(value);
-    setDrawerVisible(false); // Close the drawer
+    setDrawerVisible(false);
   };
+
+  console.log("isDrawerVisible:", isDrawerVisible);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* Search bar */}
       <Searchbar
         placeholder="Search"
         onChangeText={(query) => setSearchQuery(query)}
@@ -122,12 +124,11 @@ function Search() {
           marginTop: 16,
         }}
         inputStyle={{
-          textAlign: "left", // Left-justify the text
-          marginLeft: 10, // Add some left margin for better alignment
+          textAlign: "left",
+          marginLeft: 10,
         }}
       />
 
-      {/* Sort chip */}
       <TouchableOpacity onPress={() => setDrawerVisible(true)}>
         <Chip
           mode="outlined"
@@ -135,17 +136,15 @@ function Search() {
           style={{
             marginTop: 5,
             marginLeft: 5,
-            width: 170, // Adjust the width as needed
-            borderRadius: 20, // Make corners rounder
+            width: 170,
+            borderRadius: 20,
           }}
         >
           Sort: ({sortBy || "Select"})
         </Chip>
       </TouchableOpacity>
 
-      {/* Cards Scroll */}
       <ScrollView>
-        {/* Card 1 */}
         <View style={styles.contentContainer}>
         <Card
               style={[
@@ -200,8 +199,6 @@ function Search() {
               </View>
             </Card>
         </View>
-
-        {/* Card 2 */}
         <View style={styles.contentContainer}>
         <Card
               style={[
@@ -212,12 +209,15 @@ function Search() {
               <View style={styles.cardContent}>
                 <View style={styles.cardTop}>
                   <View style={styles.circleImage}>
-                    <Card.Cover source={require("../assets/artist1.jpg")} />
+                  <Card.Cover
+                    source={require("../assets/artist1.jpg")}
+                    resizeMode="cover" // Add this line to adjust the image
+/>
                   </View>
                   <Card.Title
                     title="Don Francisco"
                     titleStyle={styles.cardTitle}
-                    subtitle="Sabado Gigante Tattoo"
+                    subtitle="Sabado Gigante Tattoos"
                   />
                 </View>
                 <Card.Actions>
@@ -233,7 +233,7 @@ function Search() {
                           <Image
                             key={index}
                             source={{
-                              uri: `https://picsum.photos/700?random=${index}`,
+                              uri: `https://picsum.photos/800?random=${index}`,
                             }}
                             style={styles.image}
                           />
@@ -256,14 +256,16 @@ function Search() {
               </View>
             </Card>
         </View>
-
-        {/* Add more cards here as needed */}
       </ScrollView>
+      
+      <CustomBottomDrawer
+        isVisible={isDrawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        onSelect={(value) => handleSortByChange(value)}
+      />
     </GestureHandlerRootView>
   );
 }
-
-export default Search;
 
 const styles = StyleSheet.create({
   container: {
@@ -323,3 +325,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export default Search;

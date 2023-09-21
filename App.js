@@ -81,7 +81,7 @@ const App = () => {
     <Provider theme={theme}>
       <View style={styles.container}>
         <NavigationContainer theme={theme}>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator >
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="ArtistPage" component={ArtistPage} />
@@ -110,6 +110,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 80, // Adjust the height as needed
     backgroundColor: "#000",
+    borderTopColor: "#0DBB80",
+    borderTopWidth: 4
   },
   iconContainer: {
     flex: 1,

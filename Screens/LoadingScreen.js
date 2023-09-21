@@ -1,11 +1,12 @@
 import React from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, Image } from "react-native";
+import buzzLogo from "../assets/buzzLogo.gif";
 
 const LoadingScreen = () => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#0DBB80" />
-      <Text>Loading...</Text>
+      {/* Display the GIF using the Image component */}
+      <Image source={require('../assets/buzzLogo.gif')} style={styles.gif} />
     </View>
   );
 };
@@ -15,6 +16,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    // backgroundColor:'#0DBB80'
+  },
+  gif: {
+    width: 50, // Set the width and height to match your GIF's dimensions
+    height: 50,
   },
 });
 

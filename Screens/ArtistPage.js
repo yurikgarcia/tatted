@@ -103,6 +103,7 @@ function ArtistPage() {
                       name="chat-outline"
                       size={24}
                       color="black"
+                      onPress={() => navigation.navigate("Chat")}
                     />
                     <Text style={styles.iconText}>CHAT</Text>
                   </View>

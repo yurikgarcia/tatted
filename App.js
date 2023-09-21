@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import Chat from "./Screens/Chat";
 import Home from "./Screens/Home";
 import Settings from "./Screens/Settings";
 import ArtistPage from "./Screens/ArtistPage";
@@ -51,8 +52,9 @@ const AppbarWithNavigation = () => {
       <Appbar style={styles.appbar}>
         {renderAppBarItem("home", "Home")}
         {renderAppBarItem("login", "Login")}
-        {renderAppBarItem("artstation", "Search")}
-        {renderAppBarItem("cog", "Settings")}
+        {renderAppBarItem("account-search", "Search")}
+        {renderAppBarItem("chat", "Chat")}
+        {renderAppBarItem("account-circle", "Settings")}
       </Appbar>
     </View>
   );
@@ -74,6 +76,7 @@ const App = () => {
           <Stack.Navigator>
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="ArtistPage" component={ArtistPage} />
+            <Stack.Screen name="Chat" component={Chat} />
             <Stack.Screen name="Search">
               {(props) => (
                 <Search

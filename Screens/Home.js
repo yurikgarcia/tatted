@@ -63,11 +63,14 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 50,
     overflow: "hidden",
-    marginLeft: 10, // Corrected marginLeft
-    marginBottom: 0, // Updated marginBottom
+    marginLeft: 10,
+    marginBottom: 0,
   },
   imageAccordion: {
     alignItems: "center",
+  },
+  scrollView: {
+    flex: 1,
   },
 });
 
@@ -91,121 +94,123 @@ function Home() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <Image
-          source={require("../assets/logoNoBack.png")}
-          style={styles.avatarImage}
-          resizeMode="contain"
-        />
-        <View style={styles.contentContainer}>
-          <Card
-            style={[
-              { justifyContent: "center", marginTop: 5 },
-              styles.cardSize,
-            ]}
-          >
-            <View style={styles.cardContent}>
-              <View style={styles.cardTop}>
-                <View style={styles.circleImage}>
-                  <Card.Cover source={require("../assets/artist1.jpg")} />
-                </View>
-                <Card.Title
-                  title="Yurik Garcia"
-                  titleStyle={styles.cardTitle}
-                  subtitle="Blood Gulch Tattoo"
-                />
-              </View>
-              <Card.Actions>
-                <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                  <View>
-                    <ScrollView
-                      horizontal
-                      contentContainerStyle={styles.imageAccordion}
-                      showsHorizontalScrollIndicator={false}
-                      pagingEnabled
-                    >
-                      {images.map((index) => (
-                        <Image
-                          key={index}
-                          source={{
-                            uri: `https://picsum.photos/700?random=${index}`,
-                          }}
-                          style={styles.image}
-                        />
-                      ))}
-                    </ScrollView>
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.container}>
+          <Image
+            source={require("../assets/logoNoBack.png")}
+            style={styles.avatarImage}
+            resizeMode="contain"
+          />
+          <View style={styles.contentContainer}>
+            <Card
+              style={[
+                { justifyContent: "center", marginTop: 5 },
+                styles.cardSize,
+              ]}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.cardTop}>
+                  <View style={styles.circleImage}>
+                    <Card.Cover source={require("../assets/artist1.jpg")} />
                   </View>
-                </PanGestureHandler>
-              </Card.Actions>
-              <Card.Content style={{ justifyContent: "center" }}>
-                <Button
-                  mode="elevated"
-                  buttonColor="#504a4b"
-                  textColor="#ffffff"
-                  style={{ marginTop: 5, marginLeft: 90 }}
-                  onPress={() => navigation.navigate("ArtistPage")}
-                >
-                  Book Appointment
-                </Button>
-              </Card.Content>
-            </View>
-          </Card>
-        </View>
-        <View style={styles.contentContainer}>
-          <Card
-            style={[
-              { justifyContent: "center", marginTop: 5 },
-              styles.cardSize,
-            ]}
-          >
-            <View style={styles.cardContent}>
-              <View style={styles.cardTop}>
-                <View style={styles.circleImage}>
-                  <Card.Cover source={require("../assets/artist2.jpg")} />
+                  <Card.Title
+                    title="Yurik Garcia"
+                    titleStyle={styles.cardTitle}
+                    subtitle="Blood Gulch Tattoo"
+                  />
                 </View>
-                <Card.Title
-                  title="Cantinflas Garcia"
-                  titleStyle={styles.cardTitle}
-                  subtitle="Hang 'Em High Tattoo"
-                />
+                <Card.Actions>
+                  <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                    <View>
+                      <ScrollView
+                        horizontal
+                        contentContainerStyle={styles.imageAccordion}
+                        showsHorizontalScrollIndicator={false}
+                        pagingEnabled
+                      >
+                        {images.map((index) => (
+                          <Image
+                            key={index}
+                            source={{
+                              uri: `https://picsum.photos/700?random=${index}`,
+                            }}
+                            style={styles.image}
+                          />
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </PanGestureHandler>
+                </Card.Actions>
+                <Card.Content style={{ justifyContent: "center" }}>
+                  <Button
+                    mode="elevated"
+                    buttonColor="#504a4b"
+                    textColor="#ffffff"
+                    style={{ marginTop: 5, marginLeft: 90 }}
+                    onPress={() => navigation.navigate("ArtistPage")}
+                  >
+                    Book Appointment
+                  </Button>
+                </Card.Content>
               </View>
-              <Card.Actions>
-                <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                  <View>
-                    <ScrollView
-                      horizontal
-                      contentContainerStyle={styles.imageAccordion}
-                      showsHorizontalScrollIndicator={false}
-                      pagingEnabled
-                    >
-                      {images.map((index) => (
-                        <Image
-                          key={index}
-                          source={{
-                            uri: `https://picsum.photos/700?random=${index}`,
-                          }}
-                          style={styles.image}
-                        />
-                      ))}
-                    </ScrollView>
+            </Card>
+          </View>
+          <View style={styles.contentContainer}>
+            <Card
+              style={[
+                { justifyContent: "center", marginTop: 5 },
+                styles.cardSize,
+              ]}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.cardTop}>
+                  <View style={styles.circleImage}>
+                    <Card.Cover source={require("../assets/artist2.jpg")} />
                   </View>
-                </PanGestureHandler>
-              </Card.Actions>
-              <Card.Content style={{ justifyContent: "center" }}>
-                <Button
-                  mode="elevated"
-                  buttonColor="#504a4b"
-                  textColor="#ffffff"
-                  style={{ marginTop: 5, marginLeft: 90 }}
-                  onPress={() => navigation.navigate("ArtistPage")}
-                >
-                  Book Appointment
-                </Button>
-              </Card.Content>
-            </View>
-          </Card>
+                  <Card.Title
+                    title="Cantinflas Garcia"
+                    titleStyle={styles.cardTitle}
+                    subtitle="Hang 'Em High Tattoo"
+                  />
+                </View>
+                <Card.Actions>
+                  <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                    <View>
+                      <ScrollView
+                        horizontal
+                        contentContainerStyle={styles.imageAccordion}
+                        showsHorizontalScrollIndicator={false}
+                        pagingEnabled
+                      >
+                        {images.map((index) => (
+                          <Image
+                            key={index}
+                            source={{
+                              uri: `https://picsum.photos/700?random=${index}`,
+                            }}
+                            style={styles.image}
+                          />
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </PanGestureHandler>
+                </Card.Actions>
+                <Card.Content style={{ justifyContent: "center" }}>
+                  <Button
+                    mode="elevated"
+                    buttonColor="#504a4b"
+                    textColor="#ffffff"
+                    style={{ marginTop: 5, marginLeft: 90 }}
+                    onPress={() => navigation.navigate("ArtistPage")}
+                  >
+                    Book Appointment
+                  </Button>
+                </Card.Content>
+              </View>
+            </Card>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </GestureHandlerRootView>
   );
 }

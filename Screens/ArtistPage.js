@@ -63,6 +63,8 @@ function ArtistPage() {
         {/* Your content goes here */}
         <View style={styles.segContainer}>
           <SegmentedButtons
+            style= {{ width: 400, justifyContent: 'center', marginLeft: 15}}
+            density= 'regular'
             value={artistSegvalue}
             onValueChange={setArtistSegValue}
             buttons={[
@@ -171,13 +173,6 @@ function ArtistPage() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  photosContainer: {
-    marginTop: 10, // Adjust the margin as needed
-    paddingHorizontal: 10, // Adjust the padding as needed
-  },
   avatarContainer: {
     marginTop: 5,
     justifyContent: "center",
@@ -192,14 +187,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: "35%",
   },
+  avatarImage: {
+    width: "100%",
+    height: "100%",
+  },
+  container: {
+    flex: 1,
+  },
+  photosContainer: {
+    marginTop: 10, // Adjust the margin as needed
+    paddingHorizontal: 10, // Adjust the padding as needed
+  },
   photo: {
     width: 200,
     height: 200,
     margin: 5,
-  },
-  avatarImage: {
-    width: "100%",
-    height: "100%",
   },
   name: {
     marginLeft: "37%",
@@ -243,6 +245,7 @@ const styles = StyleSheet.create({
     height: 60, // Adjust the app bar height as needed
     justifyContent: "space-around", // Space around the icons
     alignItems: "center", // Center the icons vertically
+    marginBottom: 10, // Adjust the bottom margin as needed
   },
   aboutMe: {
     color: "black",

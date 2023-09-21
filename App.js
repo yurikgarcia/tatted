@@ -69,7 +69,7 @@ const App = () => {
     // Simulate a loading delay (e.g., fetching data, initializing app)
     setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Adjust the delay time as needed
+    }, 1150); // Adjust the delay time as needed
   }, []);
 
   if (isLoading) {

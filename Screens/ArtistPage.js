@@ -56,7 +56,7 @@ function ArtistPage() {
             style={styles.avatarImage}
           />
         </View>
-        <Text style={styles.name}>Cantinflas Hernandez</Text>
+        <Text style={styles.name}>Adam Garcia</Text>
       </View>
       {/* Content for the remaining portion of the screen */}
       <SafeAreaView style={styles.content}>

@@ -161,7 +161,7 @@ function Home() {
             <View style={styles.cardContent}>
               <View style={styles.cardTop}>
                 <View style={styles.circleImage}>
-                  <Card.Cover source={require("../assets/artist1.jpg")} />
+                  <Card.Cover source={require("../assets/artist2.jpg")} />
                 </View>
                 <Card.Title
                   title="Cantinflas Garcia"

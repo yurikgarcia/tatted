@@ -16,61 +16,43 @@ const Stack = createStackNavigator();
 
 const AppbarWithNavigation = () => {
   const navigation = useNavigation();
+  const [selectedScreen, setSelectedScreen] = useState("Home"); // Default selected screen
 
-  const navigateToHome = () => {
-    navigation.navigate("Home");
+  const navigateToScreen = (screenName) => {
+    navigation.navigate(screenName);
+    setSelectedScreen(screenName);
   };
 
-  const navigateToLogin = () => {
-    navigation.navigate("Login");
-  };
-  const navigateToSearch = () => {
-    navigation.navigate("Search");
-  };
-  const navigateToSettings = () => {
-    navigation.navigate("Settings");
-  };
+  const renderAppBarItem = (iconName, screenName) => (
+    <TouchableOpacity
+      onPress={() => navigateToScreen(screenName)}
+      style={styles.iconContainer}
+    >
+      <View style={styles.iconTextContainer}>
+        <MaterialCommunityIcons
+          name={iconName}
+          size={24}
+          color={selectedScreen === screenName ? "#0DBB80" : "white"}
+        />
+        <Text
+          style={[
+            styles.iconText,
+            { color: selectedScreen === screenName ? "#0DBB80" : "white" },
+          ]}
+        >
+          {screenName}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.appbarContainer}>
       <Appbar style={styles.appbar}>
-        <TouchableOpacity onPress={navigateToHome} style={styles.iconContainer}>
-          <View style={styles.iconTextContainer}>
-            <MaterialCommunityIcons name="home" size={24} color="#0DBB80" />
-            <Text style={styles.iconText}>Home</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={navigateToLogin}
-          style={styles.iconContainer}
-        >
-          <View style={styles.iconTextContainer}>
-            <MaterialCommunityIcons name="login" size={24} color="#0DBB80" />
-            <Text style={styles.iconText}>Login</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={navigateToSearch}
-          style={styles.iconContainer}
-        >
-          <View style={styles.iconTextContainer}>
-            <MaterialCommunityIcons
-              name="artstation"
-              size={24}
-              color="#0DBB80"
-            />
-            <Text style={styles.iconText}>Artist</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={navigateToSettings}
-          style={styles.iconContainer}
-        >
-          <View style={styles.iconTextContainer}>
-            <MaterialCommunityIcons name="cog" size={24} color="#0DBB80" />
-            <Text style={styles.iconText}>Settings</Text>
-          </View>
-        </TouchableOpacity>
+        {renderAppBarItem("home", "Home")}
+        {renderAppBarItem("login", "Login")}
+        {renderAppBarItem("artstation", "Search")}
+        {renderAppBarItem("cog", "Settings")}
       </Appbar>
     </View>
   );
@@ -84,8 +66,6 @@ const App = () => {
   const toggleBackgroundColor = () => {
     setBackgroundColor(backgroundColor === "white" ? "black" : "white");
   };
-
-  console.log("backgroundColor: ", backgroundColor);
 
   return (
     <Provider theme={theme}>
@@ -137,7 +117,6 @@ const styles = StyleSheet.create({
   },
   iconText: {
     fontSize: 12,
-    color: '#0DBB80'
   },
   container: {
     flex: 1,
@@ -145,3 +124,4 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+

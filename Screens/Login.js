@@ -56,6 +56,14 @@ function Login({ navigation }) {
     },
   });
 
+  const handleTabChange = (selectedIndex) => {
+    setIndex(selectedIndex);
+
+    // Determine the value of segButtonValue based on the selected tab
+    const selectedTabValue = tabNames[selectedIndex];
+    setSegButtonValue(selectedTabValue);
+  };
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <SafeAreaView style={styles.container}>
@@ -64,12 +72,9 @@ function Login({ navigation }) {
           style={styles.avatarImage}
           resizeMode="contain"
         />
-        
         <Tab
           value={index}
-          onChange={(selectedIndex) => {
-            setIndex(selectedIndex);
-          }}
+          onChange={handleTabChange}
           indicatorStyle={{
             backgroundColor: primaryColor,
             height: 3,
@@ -81,13 +86,13 @@ function Login({ navigation }) {
             title="Log In"
             titleStyle={{ fontSize: 14, color: "black" }}
             // icon={{ name: "timer", type: "ionicon", color: "black" }}
-            style={index === 0 ? styles.tabItemWhite : null} 
+            style={index === 0 ? styles.tabItemWhite : null}
           />
           <Tab.Item
             title="Sign Up"
             titleStyle={{ fontSize: 14, color: "black" }}
             // icon={{ name: "heart", type: "ionicon", color: "black" }}
-            style={index === 1 ? styles.tabItemWhite : null} 
+            style={index === 1 ? styles.tabItemWhite : null}
           />
         </Tab>
         {segButtonValue === "login" ? ( // Conditionally render email and password inputs

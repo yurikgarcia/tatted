@@ -13,6 +13,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import Review from "./Review";
+import { Tab, TabView } from "@rneui/themed";
 
 
 
@@ -21,8 +22,11 @@ function ArtistPage() {
   const [artistSegvalue, setArtistSegValue] = React.useState("info"); // Initialize with 'info'
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
+  const primaryColor = "#0DBB80";
+  const [index, setIndex] = React.useState(0); ///for tabs
+  const tabNames = ["info", "reviews"]; // Names of your tabs
 
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
 
   useEffect(() => {
@@ -43,7 +47,16 @@ function ArtistPage() {
     return images;
   };
 
+  const handleTabChange = (selectedIndex) => {
+    setIndex(selectedIndex);
+  
+    // Determine the value of segButtonValue based on the selected tab
+    const selectedTabValue = tabNames[selectedIndex];
+    setArtistSegValue(selectedTabValue); // Fix this line
+  };
+  
 
+  
   
 
   return (
@@ -62,7 +75,7 @@ function ArtistPage() {
       <SafeAreaView style={styles.content}>
         {/* Your content goes here */}
         <View style={styles.segContainer}>
-          <SegmentedButtons
+          {/* <SegmentedButtons
             style= {{ width: 400, justifyContent: 'center', marginLeft: 15}}
             density= 'regular'
             value={artistSegvalue}
@@ -77,7 +90,30 @@ function ArtistPage() {
                 label: "Reviews",
               },
             ]}
+          /> */}
+                  <Tab
+          value={index}
+          onChange={handleTabChange}
+          indicatorStyle={{
+            backgroundColor: primaryColor,
+            height: 3,
+          }}
+          variant="primary"
+          style={styles.tab} // Apply the styles to the tab
+        >
+          <Tab.Item
+            title="Information"
+            titleStyle={{ fontSize: 14, color: "black" }}
+            // icon={{ name: "timer", type: "ionicon", color: "black" }}
+            style={index === 0 ? styles.tabItemWhite : null}
           />
+          <Tab.Item
+            title="Reviews"
+            titleStyle={{ fontSize: 14, color: "black" }}
+            // icon={{ name: "heart", type: "ionicon", color: "black" }}
+            style={index === 1 ? styles.tabItemWhite : null}
+          />
+        </Tab>
         </View>
         {/* Content takes up the bottom 50% of the screen */}
         <View style={styles.bottomContent}>
@@ -174,44 +210,51 @@ function ArtistPage() {
 }
 
 const styles = StyleSheet.create({
-  avatarContainer: {
-    marginTop: 5,
-    justifyContent: "center",
-    // Styles for the avatar container
+  aboutMe: {
+    color: "black",
+  },
+  appbar: {
+    alignItems: "center", // Center the icons vertically
+    height: 60, // Adjust the app bar height as needed
+    justifyContent: "space-around", // Space around the icons
+    marginBottom: 10, // Adjust the bottom margin as needed
   },
   avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    overflow: "hidden",
-    justifyContent: "center",
     alignItems: "center",
+    borderRadius: 60,
+    height: 120,
+    justifyContent: "center",
     marginLeft: "35%",
+    overflow: "hidden",
+    width: 120,
+  },
+  avatarContainer: {
+    justifyContent: "center",
+    marginTop: 5,
+    // Styles for the avatar container
   },
   avatarImage: {
-    width: "100%",
     height: "100%",
+    width: "100%",
+  },
+  boyText: {
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  bottomContent: {
+    backgroundColor: "white", // Adjust the background color as needed
+    bottom: 0,
+    height: "95%",
+    left: 0,
+    position: "absolute",
+    right: 0,
   },
   container: {
     flex: 1,
   },
-  photosContainer: {
-    marginTop: 10, // Adjust the margin as needed
-    paddingHorizontal: 10, // Adjust the padding as needed
-  },
-  photo: {
-    width: 200,
-    height: 200,
-    margin: 5,
-  },
-  name: {
-    marginLeft: "37%",
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  boyText: {
-    marginTop: 5,
-    marginBottom: 5,
+  content: {
+    flex: 1,
+    // Styles for content section
   },
   iconText: {
     fontSize: 12,
@@ -219,38 +262,40 @@ const styles = StyleSheet.create({
   iconTextContainer: {
     alignItems: "center",
   },
-  content: {
-    flex: 1,
-    // Styles for content section
-  },
-  segContainer: {
-    // Styles for segmented buttons container
-  },
-  bottomContent: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: "99%",
-    backgroundColor: "white", // Adjust the background color as needed
-  },
   infoContent: {
     flex: 1,
     // Styles for info content
+  },
+  name: {
+    marginLeft: "37%",
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  photosContainer: {
+    marginTop: 10, // Adjust the margin as needed
+    paddingHorizontal: 10, // Adjust the padding as needed
+  },
+  photo: {
+    height: 200,
+    margin: 5,
+    width: 200,
   },
   reviewsContent: {
     flex: 1,
     // Styles for reviews content
   },
-  appbar: {
-    height: 60, // Adjust the app bar height as needed
-    justifyContent: "space-around", // Space around the icons
-    alignItems: "center", // Center the icons vertically
-    marginBottom: 10, // Adjust the bottom margin as needed
+  segContainer: {
+    // Styles for segmented buttons container
   },
-  aboutMe: {
-    color: "black",
-  }
+  tab: {
+    backgroundColor: "#FFFBFE", // Set the background color to white
+    height: 40, // Adjust the height as needed
+    marginTop: 10,
+  },
+  tabItemWhite: {
+    backgroundColor: "#FFFBFE", // Add a background color for the selected tab
+  },
 });
+
 
 export default ArtistPage;

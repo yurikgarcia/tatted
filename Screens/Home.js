@@ -17,30 +17,15 @@ import artist1 from "../assets/artist1.jpg";
 const windowWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: 10,
-  },
-  contentContainer: {
-    alignItems: "center",
-  },
+  alignItems: "center",
   avatarImage: {
-    width: windowWidth / 1,
     height: 75,
     marginHorizontal: 5,
-  },
-  image: {
+    marginBottom: 10,
     width: windowWidth / 1,
-    height: 200,
-    marginHorizontal: 5,
   },
-  text: {
-    marginTop: 20,
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+  cardContent: {
+    alignItems: "flex-start", // Align items to the top of the Card
   },
   cardSize: {
     height: 400,
@@ -50,29 +35,56 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
   },
-  cardContent: {
-    alignItems: "flex-start", // Align items to the top of the Card
-  },
   cardTop: {
-    flexDirection: "row",
     alignItems: "flex-start",
+    flexDirection: "row",
     marginBottom: 10,
   },
   circleImage: {
-    width: 50,
-    height: 50,
     borderRadius: 50,
-    overflow: "hidden",
+    height: 50,
     marginLeft: 10,
     marginBottom: 0,
+    overflow: "hidden",
+    width: 50,
+  },
+  container: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "flex-start",
+    marginTop: 10,
+  },
+  contentContainer: {
+    alignItems: "center",
+  },
+  flexDirection: "row",
+  image: {
+    height: 200,
+    marginHorizontal: 5,
+    width: windowWidth / 1,
   },
   imageAccordion: {
     alignItems: "center",
   },
+  justifyContent: "flex-start",
+  marginHorizontal: 5,
+  marginBottom: 10,
+  marginTop: 20,
+  overflow: "hidden",
   scrollView: {
     flex: 1,
   },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  textAlign: "left",
+  textAlign: "center",
+  width: windowWidth / 1,
 });
+
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 

@@ -15,9 +15,6 @@ import { FlatList } from "react-native";
 import Review from "./Review";
 import { Tab, TabView } from "@rneui/themed";
 
-
-
-
 function ArtistPage() {
   const [artistSegvalue, setArtistSegValue] = React.useState("info"); // Initialize with 'info'
   const [column1Images, setColumn1Images] = useState([]);
@@ -27,7 +24,6 @@ function ArtistPage() {
   const tabNames = ["info", "reviews"]; // Names of your tabs
 
   const navigation = useNavigation();
-
 
   useEffect(() => {
     // Fetch random images for column 1
@@ -49,15 +45,11 @@ function ArtistPage() {
 
   const handleTabChange = (selectedIndex) => {
     setIndex(selectedIndex);
-  
+
     // Determine the value of segButtonValue based on the selected tab
     const selectedTabValue = tabNames[selectedIndex];
     setArtistSegValue(selectedTabValue); // Fix this line
   };
-  
-
-  
-  
 
   return (
     <View style={styles.container}>
@@ -91,112 +83,146 @@ function ArtistPage() {
               },
             ]}
           /> */}
-                  <Tab
-          value={index}
-          onChange={handleTabChange}
-          indicatorStyle={{
-            backgroundColor: primaryColor,
-            height: 3,
-          }}
-          variant="primary"
-          style={styles.tab} // Apply the styles to the tab
-        >
-          <Tab.Item
-            title="Information"
-            titleStyle={{ fontSize: 14, color: "black" }}
-            // icon={{ name: "timer", type: "ionicon", color: "black" }}
-            style={index === 0 ? styles.tabItemWhite : null}
-          />
-          <Tab.Item
-            title="Reviews"
-            titleStyle={{ fontSize: 14, color: "black" }}
-            // icon={{ name: "heart", type: "ionicon", color: "black" }}
-            style={index === 1 ? styles.tabItemWhite : null}
-          />
-        </Tab>
+          <Tab
+            value={index}
+            onChange={handleTabChange}
+            indicatorStyle={{
+              backgroundColor: primaryColor,
+              height: 3,
+            }}
+            variant="primary"
+            style={styles.tab} // Apply the styles to the tab
+          >
+            <Tab.Item
+              title="Information"
+              titleStyle={{ fontSize: 14, color: "black" }}
+              // icon={{ name: "timer", type: "ionicon", color: "black" }}
+              style={index === 0 ? styles.tabItemWhite : null}
+            />
+            <Tab.Item
+              title="Reviews"
+              titleStyle={{ fontSize: 14, color: "black" }}
+              // icon={{ name: "heart", type: "ionicon", color: "black" }}
+              style={index === 1 ? styles.tabItemWhite : null}
+            />
+          </Tab>
         </View>
         {/* Content takes up the bottom 50% of the screen */}
         <View style={styles.bottomContent}>
           {artistSegvalue === "info" && (
-                  <ScrollView>    
+            <ScrollView>
               <View
-              // backgroundColor="blue" // Adjust the background color as needed
-              style={styles.infoContent} >
-              <Appbar style={styles.appbar}>
-                <TouchableOpacity style={styles.iconContainer}>
-                  <View style={styles.iconTextContainer}>
-                    <MaterialCommunityIcons
-                      name="account-plus-outline"
-                      size={24}
-                      color="black"
-                    />
-                    <Text style={styles.iconText}>ADD</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconContainer}>
-                  <View style={styles.iconTextContainer}>
-                    <MaterialCommunityIcons
-                      name="chat-outline"
-                      size={24}
-                      color="black"
+                // backgroundColor="blue" // Adjust the background color as needed
+                style={styles.infoContent}
+              >
+                <Appbar style={styles.appbar}>
+                  <TouchableOpacity style={styles.iconContainer}>
+                    <View style={styles.iconTextContainer}>
+                      <MaterialCommunityIcons
+                        name="account-plus-outline"
+                        size={24}
+                        color="black"
+                      />
+                      <Text style={styles.iconText}>ADD</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
                       onPress={() => navigation.navigate("Chat")}
-                    />
-                    <Text style={styles.iconText}>CHAT</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconContainer}>
-                  <View style={styles.iconTextContainer}>
-                    <MaterialCommunityIcons
-                      name="star-outline"
-                      size={24}
-                      color="black"
-                      onPress={() => navigation.navigate("Review")}
-                    />
-                    <Text style={styles.iconText}>REVIEW</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconContainer}>
-                  <View style={styles.iconTextContainer}>
-                    <MaterialCommunityIcons
-                      name="share-outline"
-                      size={24}
-                      color="black"
-                    />
-                    <Text style={styles.iconText}>SHARE</Text>
-                  </View>
-                </TouchableOpacity>
-              </Appbar>
-              <Text style={{ color: styles.subHeading, fontWeight: 'bold', marginTop: 10, marginLeft: 5 }}>ABOUT</Text>
-              <Text style={styles.bodyText}> Que vuelta acere! Soy tremendo artista paque tu sepas!</Text>
-              <Text style={styles.bodyText}> Aqui se hacen tremendos tatuajes y vendemos mejores croquetas!</Text>
-              <Text style={{ color: styles.subHeading, fontWeight: 'bold', marginTop: 10, marginLeft: 5 }}>TATTOO SHOP</Text>
-              <Text style={styles.bodyText}> La Marca Tatuaje</Text>
-              <Text style={styles.bodyText}> 6867 Calle Ocho</Text>
-              <Text style={styles.bodyText}> Miami, FL 33144</Text>
-              <Text style={{ color: styles.subHeading, fontWeight: 'bold', marginTop: 10, marginLeft: 5 }}>PHOTOS</Text>
-              
-              <View style={{ flexDirection: 'row', marginLeft: 3}}>
-                <FlatList
-                  data={column1Images}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <Image source={{ uri: item }} style={styles.photo} />
-                  )}
-                />
-                <FlatList
-                  data={column2Images}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <Image source={{ uri: item }} style={styles.photo} />
-                  )}
-                />
+                      style={styles.iconContainer}>
+                    <View 
+                      style={styles.iconTextContainer}>
+                      <MaterialCommunityIcons
+                        name="chat-outline"
+                        size={24}
+                        color="black"
+                        // onPress={() => navigation.navigate("Chat")}
+                      />
+                      <Text style={styles.iconText}>CHAT</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    onPress={() => navigation.navigate("Review")}
+                    style={styles.iconContainer}>
+                    <View style={styles.iconTextContainer}>
+                      <MaterialCommunityIcons
+                        name="star-outline"
+                        size={24}
+                        color="black"
+                      />
+                      <Text style={styles.iconText}>REVIEW</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.iconContainer}>
+                    <View style={styles.iconTextContainer}>
+                      <MaterialCommunityIcons
+                        name="share-outline"
+                        size={24}
+                        color="black"
+                      />
+                      <Text style={styles.iconText}>SHARE</Text>
+                    </View>
+                  </TouchableOpacity>
+                </Appbar>
+                <Text
+                  style={{
+                    color: styles.subHeading,
+                    fontWeight: "bold",
+                    marginTop: 10,
+                    marginLeft: 5,
+                  }}
+                >
+                  ABOUT
+                </Text>
+                <Text style={styles.bodyText}>
+                  {" "}
+                  Que vuelta acere! Soy tremendo artista paque tu sepas!
+                </Text>
+                <Text style={styles.bodyText}>
+                  {" "}
+                  Aqui se hacen tremendos tatuajes y vendemos mejores croquetas!
+                </Text>
+                <Text
+                  style={{
+                    color: styles.subHeading,
+                    fontWeight: "bold",
+                    marginTop: 10,
+                    marginLeft: 5,
+                  }}
+                >
+                  TATTOO SHOP
+                </Text>
+                <Text style={styles.bodyText}> La Marca Tatuaje</Text>
+                <Text style={styles.bodyText}> 6867 Calle Ocho</Text>
+                <Text style={styles.bodyText}> Miami, FL 33144</Text>
+                <Text
+                  style={{
+                    color: styles.subHeading,
+                    fontWeight: "bold",
+                    marginTop: 10,
+                    marginLeft: 5,
+                  }}
+                >
+                  PHOTOS
+                </Text>
+
+                <View style={{ flexDirection: "row", marginLeft: 3 }}>
+                  <FlatList
+                    data={column1Images}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                      <Image source={{ uri: item }} style={styles.photo} />
+                    )}
+                  />
+                  <FlatList
+                    data={column2Images}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                      <Image source={{ uri: item }} style={styles.photo} />
+                    )}
+                  />
+                </View>
               </View>
-
-
-
-            </View>
             </ScrollView>
-
           )}
           {artistSegvalue === "reviews" && (
             <View style={styles.reviewsContent}>
@@ -296,6 +322,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFBFE", // Add a background color for the selected tab
   },
 });
-
 
 export default ArtistPage;

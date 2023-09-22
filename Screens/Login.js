@@ -1,10 +1,11 @@
 import React from "react";
 import { Button } from "react-native-paper";
-import { SafeAreaView, StyleSheet, Image, Dimensions, } from "react-native";
+import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
 import { SegmentedButtons, TextInput } from "react-native-paper";
-import { Switch } from "react-native-paper";
+import { Switch, Divider } from "react-native-paper";
 import { View, Text } from "react-native";
 import logoNoBack from "../assets/logoNoBack.png";
+import { Tab, TabView } from "@rneui/themed";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -12,6 +13,8 @@ function Login({ navigation }) {
   const [segButtonValue, setSegButtonValue] = React.useState("login");
   const [isArtistSwitchOn, setIsArtistSwitchOn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false); //state that allows the user to show imputed password
+  const [index, setIndex] = React.useState(0); ///for tabs
+  const tabNames = ["login", "sign-up"]; // Names of your tabs
   const primaryColor = "#0DBB80";
   const [login, setLogin] = React.useState({
     email: "",
@@ -43,25 +46,50 @@ function Login({ navigation }) {
       marginTop: 10,
       marginBottom: 10,
     },
+    tab: {
+      backgroundColor: "#FFFBFE", // Set the background color to white
+      height: 40, // Adjust the height as needed
+      marginTop: 10,
+    },
+    tabItemWhite: {
+      backgroundColor: "#FFFBFE", // Add a background color for the selected tab
+    },
   });
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <SafeAreaView style={styles.container}>
         <Image
-            source={require("../assets/logoNoBack.png")}
-            style={styles.avatarImage}
-            resizeMode="contain"
-          />
-        <SegmentedButtons
-          value={segButtonValue}
-          onValueChange={setSegButtonValue}
-          style={{ marginTop: 10 }}
-          buttons={[
-            { value: "login", label: "LOG IN" },
-            { value: "sign-up", label: "SIGN UP" },
-          ]}
+          source={require("../assets/logoNoBack.png")}
+          style={styles.avatarImage}
+          resizeMode="contain"
         />
+        
+        <Tab
+          value={index}
+          onChange={(selectedIndex) => {
+            setIndex(selectedIndex);
+          }}
+          indicatorStyle={{
+            backgroundColor: primaryColor,
+            height: 3,
+          }}
+          variant="primary"
+          style={styles.tab} // Apply the styles to the tab
+        >
+          <Tab.Item
+            title="Log In"
+            titleStyle={{ fontSize: 14, color: "black" }}
+            // icon={{ name: "timer", type: "ionicon", color: "black" }}
+            style={index === 0 ? styles.tabItemWhite : null} 
+          />
+          <Tab.Item
+            title="Sign Up"
+            titleStyle={{ fontSize: 14, color: "black" }}
+            // icon={{ name: "heart", type: "ionicon", color: "black" }}
+            style={index === 1 ? styles.tabItemWhite : null} 
+          />
+        </Tab>
         {segButtonValue === "login" ? ( // Conditionally render email and password inputs
           <View style={{ marginTop: 10 }}>
             <TextInput

@@ -1,11 +1,10 @@
 import React from "react";
 import { Button } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
-import { SegmentedButtons, TextInput } from "react-native-paper";
-import { Switch, Divider } from "react-native-paper";
+import { Switch } from "react-native-paper";
+import { Tab } from "@rneui/themed";
+import { TextInput } from "react-native-paper";
 import { View, Text } from "react-native";
-import logoNoBack from "../assets/logoNoBack.png";
-import { Tab, TabView } from "@rneui/themed";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -32,7 +31,7 @@ function Login({ navigation }) {
   const styles = StyleSheet.create({
     avatarImage: {
       width: windowWidth / 1,
-      height: 75,
+      height: 125,
       marginHorizontal: 5,
     },
     container: {
@@ -129,6 +128,9 @@ function Login({ navigation }) {
             >
               LOG IN
             </Button>
+            <Text style={{ marginTop: 10, marginLeft: 110 }}>
+              Forgot Password?
+            </Text>
           </View>
         ) : (
           // Conditionally render first name and last name inputs
@@ -189,6 +191,7 @@ function Login({ navigation }) {
                 />
               }
             />
+            <Text style={{ marginTop: 10 }}>Are You An Artist?</Text>
             <View style={styles.switchContainer}>
               <Text>No</Text>
               <Switch

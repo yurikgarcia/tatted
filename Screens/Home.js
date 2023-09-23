@@ -180,6 +180,60 @@ function Home() {
                     <Card.Cover source={require("../assets/artist2.jpg")} />
                   </View>
                   <Card.Title
+                    title="Don Francisco"
+                    titleStyle={styles.cardTitle}
+                    subtitle="Sabado Gigante Tattoo"
+                  />
+                </View>
+                <Card.Actions>
+                  <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                    <View>
+                      <ScrollView
+                        horizontal
+                        contentContainerStyle={styles.imageAccordion}
+                        showsHorizontalScrollIndicator={false}
+                        pagingEnabled
+                      >
+                        {images.map((index) => (
+                          <Image
+                            key={index}
+                            source={{
+                              uri: `https://picsum.photos/700?random=${index}`,
+                            }}
+                            style={styles.image}
+                          />
+                        ))}
+                      </ScrollView>
+                    </View>
+                  </PanGestureHandler>
+                </Card.Actions>
+                <Card.Content style={{ justifyContent: "center" }}>
+                  <Button
+                    mode="elevated"
+                    buttonColor="#504a4b"
+                    textColor="#ffffff"
+                    style={{ marginTop: 5, marginLeft: 90 }}
+                    onPress={() => navigation.navigate("ArtistPage")}
+                  >
+                    Book Appointment
+                  </Button>
+                </Card.Content>
+              </View>
+            </Card>
+          </View>
+          <View style={styles.contentContainer}>
+            <Card
+              style={[
+                { justifyContent: "center", marginTop: 5 },
+                styles.cardSize,
+              ]}
+            >
+              <View style={styles.cardContent}>
+                <View style={styles.cardTop}>
+                  <View style={styles.circleImage}>
+                    <Card.Cover source={require("../assets/artist2.jpg")} />
+                  </View>
+                  <Card.Title
                     title="Cantinflas Garcia"
                     titleStyle={styles.cardTitle}
                     subtitle="Hang 'Em High Tattoo"

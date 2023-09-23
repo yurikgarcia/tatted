@@ -111,7 +111,7 @@ function Search() {
     setDrawerVisible(false);
   };
 
-  console.log("isDrawerVisible:", isDrawerVisible);
+  
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

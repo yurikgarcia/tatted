@@ -42,7 +42,7 @@ function Review() {
         <TextInput
           activeOutlineColor={primaryColor}
           mode="outlined"
-          label="Write Cantinflas a review"
+          label="Leave Cantinflas A Review!"
           width={400}
           value={review}
           onChangeText={(text) => setReview(text)}

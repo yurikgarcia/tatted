@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Dimensions,
   View,
   Text,
   StyleSheet,
@@ -8,22 +9,43 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Appbar, SegmentedButtons } from "react-native-paper";
+import {
+  Appbar,
+  Avatar,
+  Card,
+} from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native";
-import Review from "./Review";
-import { Tab, TabView } from "@rneui/themed";
+import { Tab } from "@rneui/themed";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
+import { FontAwesome } from "@expo/vector-icons";
+
+const windowWidth = Dimensions.get("window").width;
 
 function ArtistPage() {
-  const [artistSegvalue, setArtistSegValue] = React.useState("info"); // Initialize with 'info'
+  const [artistSegvalue, setArtistSegValue] = React.useState("info");
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
   const primaryColor = "#0DBB80";
-  const [index, setIndex] = React.useState(0); ///for tabs
-  const tabNames = ["info", "reviews"]; // Names of your tabs
+  const [index, setIndex] = React.useState(0);
+  const tabNames = ["info", "reviews"];
 
   const navigation = useNavigation();
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = [1, 2, 3, 4, 5];
+
+  const handleGestureEvent = (event) => {
+    if (event.nativeEvent.state === State.END) {
+      const { translationX } = event.nativeEvent;
+      if (translationX > 0 && currentImageIndex > 0) {
+        setCurrentImageIndex(currentImageIndex - 1);
+      } else if (translationX < 0 && currentImageIndex < images.length - 1) {
+        setCurrentImageIndex(currentImageIndex + 1);
+      }
+    }
+  };
 
   useEffect(() => {
     // Fetch random images for column 1
@@ -48,13 +70,29 @@ function ArtistPage() {
 
     // Determine the value of segButtonValue based on the selected tab
     const selectedTabValue = tabNames[selectedIndex];
-    setArtistSegValue(selectedTabValue); // Fix this line
+    setArtistSegValue(selectedTabValue);
+  };
+
+  // Function to render stars
+  const renderStars = () => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(
+        <FontAwesome
+          key={i}
+          name="star"
+          size={20}
+          color="#FFD700"
+          style={{ marginRight: 2 }}
+        />
+      );
+    }
+    return stars;
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
-        {/* Your avatar circle picture goes here */}
         <View style={styles.avatar}>
           <Image
             source={require("../assets/artist2.jpg")}
@@ -63,26 +101,8 @@ function ArtistPage() {
         </View>
         <Text style={styles.name}>Adam Garcia</Text>
       </View>
-      {/* Content for the remaining portion of the screen */}
       <SafeAreaView style={styles.content}>
-        {/* Your content goes here */}
         <View style={styles.segContainer}>
-          {/* <SegmentedButtons
-            style= {{ width: 400, justifyContent: 'center', marginLeft: 15}}
-            density= 'regular'
-            value={artistSegvalue}
-            onValueChange={setArtistSegValue}
-            buttons={[
-              {
-                value: "info",
-                label: "Information",
-              },
-              {
-                value: "reviews",
-                label: "Reviews",
-              },
-            ]}
-          /> */}
           <Tab
             value={index}
             onChange={handleTabChange}
@@ -91,30 +111,24 @@ function ArtistPage() {
               height: 3,
             }}
             variant="primary"
-            style={styles.tab} // Apply the styles to the tab
+            style={styles.tab}
           >
             <Tab.Item
               title="Information"
               titleStyle={{ fontSize: 14, color: "black" }}
-              // icon={{ name: "timer", type: "ionicon", color: "black" }}
               style={index === 0 ? styles.tabItemWhite : null}
             />
             <Tab.Item
               title="Reviews"
               titleStyle={{ fontSize: 14, color: "black" }}
-              // icon={{ name: "heart", type: "ionicon", color: "black" }}
               style={index === 1 ? styles.tabItemWhite : null}
             />
           </Tab>
         </View>
-        {/* Content takes up the bottom 50% of the screen */}
         <View style={styles.bottomContent}>
           {artistSegvalue === "info" && (
             <ScrollView>
-              <View
-                // backgroundColor="blue" // Adjust the background color as needed
-                style={styles.infoContent}
-              >
+              <View style={styles.infoContent}>
                 <Appbar style={styles.appbar}>
                   <TouchableOpacity style={styles.iconContainer}>
                     <View style={styles.iconTextContainer}>
@@ -127,22 +141,22 @@ function ArtistPage() {
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity
-                      onPress={() => navigation.navigate("Chat")}
-                      style={styles.iconContainer}>
-                    <View 
-                      style={styles.iconTextContainer}>
+                    onPress={() => navigation.navigate("Chat")}
+                    style={styles.iconContainer}
+                  >
+                    <View style={styles.iconTextContainer}>
                       <MaterialCommunityIcons
                         name="chat-outline"
                         size={24}
                         color="black"
-                        // onPress={() => navigation.navigate("Chat")}
                       />
                       <Text style={styles.iconText}>CHAT</Text>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     onPress={() => navigation.navigate("Review")}
-                    style={styles.iconContainer}>
+                    style={styles.iconContainer}
+                  >
                     <View style={styles.iconTextContainer}>
                       <MaterialCommunityIcons
                         name="star-outline"
@@ -204,7 +218,6 @@ function ArtistPage() {
                 >
                   PHOTOS
                 </Text>
-
                 <View style={{ flexDirection: "row", marginLeft: 3 }}>
                   <FlatList
                     data={column1Images}
@@ -226,7 +239,66 @@ function ArtistPage() {
           )}
           {artistSegvalue === "reviews" && (
             <View style={styles.reviewsContent}>
-              <Text>Review content goes here</Text>
+              <View style={styles.contentContainer}>
+                <Card
+                  style={[
+                    { justifyContent: "center", marginTop: 5 },
+                    styles.cardSize,
+                  ]}
+                  >
+                    <View style={{ flexDirection: 'row', marginLeft: 310}}>{renderStars()}</View>
+                  <View style={styles.cardContent}>
+                    <View style={styles.cardTop}>
+              
+                      <View style={styles.circleImage}>
+                        <Avatar.Text
+                          label="YG"
+                          size={50}
+                          style={{ backgroundColor: "#0DBB" }}
+                          labelStyle={{ fontSize: 24 }}
+                          />
+          
+                      </View>
+                      <Card.Title
+                        title="Yurik Garcia"
+                        subtitle="May 13, 2023 4:30 PM"
+                        titleStyle={styles.cardTitle}
+                        />
+                
+                    </View>
+                    <Card.Content>
+                      <Text>
+                        {" "}
+                        Estes tipo es tremenda fula. La verdad que me hizo
+                        tremenda mierdo. No puedo creer le gran pinga que me
+                        hizo. Tremendo artista.
+                      </Text>
+                    </Card.Content>
+                    <Card.Actions>
+                      <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                        <View>
+                          <ScrollView
+                            horizontal
+                            contentContainerStyle={styles.imageAccordion}
+                            showsHorizontalScrollIndicator={false}
+                            pagingEnabled
+                          >
+                            {images.map((index) => (
+                              <Image
+                                key={index}
+                                source={{
+                                  uri: `https://picsum.photos/700?random=${index}`,
+                                }}
+                                style={styles.image}
+                              />
+                            ))}
+                          </ScrollView>
+                        </View>
+                      </PanGestureHandler>
+                    </Card.Actions>
+                  </View>
+                </Card>
+              </View>
             </View>
           )}
         </View>
@@ -275,6 +347,29 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
   },
+  cardContent: {
+    alignItems: "flex-start", // Align items to the top of the Card
+  },
+  cardSize: {
+    height: 400,
+    width: windowWidth - 10,
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  cardTop: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  circleImage: {
+    borderRadius: 50,
+    height: 50,
+    marginLeft: 10,
+    overflow: "hidden",
+    width: 50,
+  },
   container: {
     flex: 1,
   },
@@ -282,10 +377,21 @@ const styles = StyleSheet.create({
     flex: 1,
     // Styles for content section
   },
+  contentContainer: {
+    alignItems: "center",
+  },
   iconText: {
     fontSize: 12,
   },
   iconTextContainer: {
+    alignItems: "center",
+  },
+  image: {
+    height: 200,
+    marginHorizontal: 5,
+    width: windowWidth / 2,
+  },
+  imageAccordion: {
     alignItems: "center",
   },
   infoContent: {
@@ -293,7 +399,7 @@ const styles = StyleSheet.create({
     // Styles for info content
   },
   name: {
-    marginLeft: "37%",
+    marginLeft: "40%",
     marginBottom: 5,
     marginTop: 5,
   },
@@ -310,8 +416,11 @@ const styles = StyleSheet.create({
     flex: 1,
     // Styles for reviews content
   },
-  segContainer: {
-    // Styles for segmented buttons container
+  starContainer: {
+    position: "absolute",
+    top: 10, // Adjust the top position as needed
+    right: 10, // Adjust the right position as needed
+    flexDirection: "row",
   },
   tab: {
     backgroundColor: "#FFFBFE", // Set the background color to white

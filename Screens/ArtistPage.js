@@ -9,17 +9,14 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import {
-  Appbar,
-  Avatar,
-  Card,
-} from "react-native-paper";
+import { Appbar, Avatar, Card } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import { FlatList } from "react-native";
+import { FlatList, Linking } from "react-native";
 import { Tab } from "@rneui/themed";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
+import MapView, { Marker } from "react-native-maps";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -88,6 +85,18 @@ function ArtistPage() {
       );
     }
     return stars;
+  };
+
+  //Functions for the map//
+  const [location, setLocation] = useState({
+    latitude: 37.7749, // Replace with the actual latitude
+    longitude: -122.4194, // Replace with the actual longitude
+  });
+
+  const openAppleMaps = () => {
+    const { latitude, longitude } = location;
+    const url = `http://maps.apple.com/?ll=${latitude},${longitude}`;
+    Linking.openURL(url);
   };
 
   return (
@@ -177,11 +186,10 @@ function ArtistPage() {
                     </View>
                   </TouchableOpacity>
                 </Appbar>
+
                 <Text
                   style={{
-                    color: styles.subHeading,
                     fontWeight: "bold",
-                    marginTop: 10,
                     marginLeft: 5,
                   }}
                 >
@@ -193,26 +201,79 @@ function ArtistPage() {
                 </Text>
                 <Text style={styles.bodyText}>
                   {" "}
-                  Aqui se hacen tremendos tatuajes y vendemos mejores croquetas!
+                  Aqui se hacen tremendos tatuajes y  mejores croquetas!
                 </Text>
+
                 <Text
                   style={{
-                    color: styles.subHeading,
                     fontWeight: "bold",
-                    marginTop: 10,
+                    marginTop: 5,
                     marginLeft: 5,
                   }}
                 >
                   TATTOO SHOP
                 </Text>
-                <Text style={styles.bodyText}> La Marca Tatuaje</Text>
-                <Text style={styles.bodyText}> 6867 Calle Ocho</Text>
-                <Text style={styles.bodyText}> Miami, FL 33144</Text>
+                
+                <View style={styles.mapContainer}>
+                <View style={{marginLeft: 3, marginRight: 5}}>
+                  <Text style={{ fontWeight: 'bold' }}> La Marca Tatuaje</Text>
+                  <Text> 6867 Calle Ocho</Text>
+                  <Text> Miami, FL 33144</Text>
+                  <View style={{flexDirection:'row', marginTop: 10}}>
+                  <Text style={{fontWeight: 'bold'}}> Monday </Text>
+                  <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                  <Text style={{fontWeight: 'bold'}}> Tuesday </Text>
+                  <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                  <Text style={{fontWeight: 'bold'}}> Wednesday </Text>
+                  <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                  <Text style={{fontWeight: 'bold'}}> Thursday </Text>
+                  <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                  <Text style={{fontWeight: 'bold'}}> Friday </Text>
+                  <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                  <Text style={{fontWeight: 'bold'}}> Saturday </Text>
+                  <Text> 11am - 8pm</Text>
+                  </View>
+
+                </View>
+                  <TouchableOpacity
+                    style={styles.leftHalf}
+                    onPress={openAppleMaps}
+                  >
+                    <MapView
+                      style={styles.map}
+                      region={{
+                        latitude: location.latitude,
+                        longitude: location.longitude,
+                        latitudeDelta: 0.01,
+                        longitudeDelta: 0.01,
+                      }}
+                    >
+                      <Marker
+                        coordinate={{
+                          latitude: location.latitude,
+                          longitude: location.longitude,
+                        }}
+                        title="Person's Location"
+                        description="Click to open in Apple Maps"
+                      />
+                    </MapView>
+                    {/* <View style={styles.gradientOverlay} /> */}
+                  </TouchableOpacity>
+                </View>
                 <Text
                   style={{
-                    color: styles.subHeading,
                     fontWeight: "bold",
-                    marginTop: 10,
+                    marginTop: 5,
                     marginLeft: 5,
                   }}
                 >
@@ -245,26 +306,25 @@ function ArtistPage() {
                     { justifyContent: "center", marginTop: 5 },
                     styles.cardSize,
                   ]}
-                  >
-                    <View style={{ flexDirection: 'row', marginLeft: 310}}>{renderStars()}</View>
+                >
+                  <View style={{ flexDirection: "row", marginLeft: 310 }}>
+                    {renderStars()}
+                  </View>
                   <View style={styles.cardContent}>
                     <View style={styles.cardTop}>
-              
                       <View style={styles.circleImage}>
                         <Avatar.Text
                           label="YG"
                           size={50}
                           style={{ backgroundColor: "#0DBB" }}
                           labelStyle={{ fontSize: 24 }}
-                          />
-          
+                        />
                       </View>
                       <Card.Title
                         title="Yurik Garcia"
                         subtitle="May 13, 2023 4:30 PM"
                         titleStyle={styles.cardTitle}
-                        />
-                
+                      />
                     </View>
                     <Card.Content>
                       <Text>
@@ -391,6 +451,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     width: windowWidth / 2,
   },
+  mapContainer: {
+    flex: 0.75,
+    flexDirection: 'row', // Make the parent container a row to split the screen in half
+  },
   imageAccordion: {
     alignItems: "center",
   },
@@ -429,6 +493,22 @@ const styles = StyleSheet.create({
   },
   tabItemWhite: {
     backgroundColor: "#FFFBFE", // Add a background color for the selected tab
+  },
+  leftHalf: {
+    flex: 1, // Take up half of the available width
+    backgroundColor: "transparent",
+  },
+  map: {
+    flex: 1,
+  },
+  gradientOverlay: {
+    position: "absolute",
+    left: "35%", // Cover 25% of the map's width
+    top: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor:
+      "linear-gradient(90deg, rgba(0, 0, 0, 0.7) 35%, rgba(0, 0, 0, 0) 35%)",
   },
 });
 

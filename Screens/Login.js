@@ -63,6 +63,8 @@ function Login({ navigation }) {
     setSegButtonValue(selectedTabValue);
   };
 
+ 
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <SafeAreaView style={styles.container}>

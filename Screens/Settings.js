@@ -1,9 +1,12 @@
 import React from "react";
-import { View, Text, Share, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { useNavigation } from "@react-navigation/native";
+import { View, Text, Share, StyleSheet, TouchableOpacity } from "react-native";
 
 function Settings() {
+  const navigation = useNavigation();
+
   const shareWithFriends = async () => {
     try {
       const result = await Share.share({
@@ -79,10 +82,14 @@ function Settings() {
           <Text style={styles.textStyle}>Invite An Artist</Text>
         </View>
       </TouchableOpacity>
+      <TouchableOpacity
+                    onPress={() => navigation.navigate("Vouchers")}
+      >
       <View style={styles.settingsText}>
         <MaterialCommunityIcons name="ticket" size={24} color="black" />
         <Text style={styles.textStyle}>Vouchers</Text>
       </View>
+      </TouchableOpacity>
       <View style={styles.settingsText}>
         <MaterialCommunityIcons
           name="email-newsletter"

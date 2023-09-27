@@ -8,6 +8,7 @@ import ArtistPage from "./Screens/ArtistPage";
 import Search from "./Screens/Search";
 import Login from "./Screens/Login";
 import Review from "./Screens/Review";
+import Vouchers from "./SettingScreens/Vouchers";
 import Chat from "./Screens/Chat";
 import { Provider, Appbar, useTheme } from "react-native-paper";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
@@ -89,6 +90,7 @@ const App = () => {
             <Stack.Screen name="Search" component={Search} />
             <Stack.Screen name="Settings" component={Settings} />
             <Stack.Screen name="Review" component={Review} />
+            <Stack.Screen name="Vouchers" component={Vouchers} />
           </Stack.Navigator>
           <AppbarWithNavigation />
         </NavigationContainer>

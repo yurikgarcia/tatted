@@ -16,76 +16,6 @@ import artist1 from "../assets/artist1.jpg";
 
 const windowWidth = Dimensions.get("window").width;
 
-const styles = StyleSheet.create({
-  alignItems: "center",
-  avatarImage: {
-    height: 75,
-    marginHorizontal: 5,
-    marginBottom: 10,
-    width: windowWidth / 1,
-  },
-  cardContent: {
-    alignItems: "flex-start", // Align items to the top of the Card
-  },
-  cardSize: {
-    height: 400,
-    width: windowWidth - 40,
-  },
-  cardTitle: {
-    fontWeight: "bold",
-    textAlign: "left",
-  },
-  cardTop: {
-    alignItems: "flex-start",
-    flexDirection: "row",
-    marginBottom: 10,
-  },
-  circleImage: {
-    borderRadius: 50,
-    height: 50,
-    marginLeft: 10,
-    marginBottom: 0,
-    overflow: "hidden",
-    width: 50,
-  },
-  container: {
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "flex-start",
-    marginTop: 10,
-  },
-  contentContainer: {
-    alignItems: "center",
-  },
-  flexDirection: "row",
-  image: {
-    height: 200,
-    marginHorizontal: 5,
-    width: windowWidth / 1,
-  },
-  imageAccordion: {
-    alignItems: "center",
-  },
-  justifyContent: "flex-start",
-  marginHorizontal: 5,
-  marginBottom: 10,
-  marginTop: 20,
-  overflow: "hidden",
-  scrollView: {
-    flex: 1,
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 20,
-    textAlign: "center",
-  },
-  textAlign: "left",
-  textAlign: "center",
-  width: windowWidth / 1,
-});
-
-
 const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 function Home() {
@@ -282,3 +212,72 @@ function Home() {
 }
 
 export default Home;
+
+const styles = StyleSheet.create({
+  alignItems: "center",
+  avatarImage: {
+    height: 75,
+    marginHorizontal: 5,
+    marginBottom: 10,
+    width: windowWidth / 1,
+  },
+  cardContent: {
+    alignItems: "flex-start", // Align items to the top of the Card
+  },
+  cardSize: {
+    height: 400,
+    width: windowWidth - 40,
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  cardTop: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  circleImage: {
+    borderRadius: 50,
+    height: 50,
+    marginLeft: 10,
+    marginBottom: 0,
+    overflow: "hidden",
+    width: 50,
+  },
+  container: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "flex-start",
+    marginTop: 10,
+  },
+  contentContainer: {
+    alignItems: "center",
+  },
+  flexDirection: "row",
+  image: {
+    height: 200,
+    marginHorizontal: 5,
+    width: windowWidth / 1,
+  },
+  imageAccordion: {
+    alignItems: "center",
+  },
+  justifyContent: "flex-start",
+  marginHorizontal: 5,
+  marginBottom: 10,
+  marginTop: 20,
+  overflow: "hidden",
+  scrollView: {
+    flex: 1,
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  textAlign: "center",
+  textAlign: "left",
+  width: windowWidth / 1,
+});

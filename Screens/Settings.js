@@ -82,22 +82,22 @@ function Settings() {
           <Text style={styles.textStyle}>Invite An Artist</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity
-                    onPress={() => navigation.navigate("Vouchers")}
-      >
-      <View style={styles.settingsText}>
-        <MaterialCommunityIcons name="ticket" size={24} color="black" />
-        <Text style={styles.textStyle}>Vouchers</Text>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Vouchers")}>
+        <View style={styles.settingsText}>
+          <MaterialCommunityIcons name="ticket" size={24} color="black" />
+          <Text style={styles.textStyle}>Vouchers</Text>
+        </View>
       </TouchableOpacity>
-      <View style={styles.settingsText}>
-        <MaterialCommunityIcons
-          name="email-newsletter"
-          size={24}
-          color="black"
-        />
-        <Text style={styles.textStyle}>Feedback</Text>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Feedback")}>
+        <View style={styles.settingsText}>
+          <MaterialCommunityIcons
+            name="email-newsletter"
+            size={24}
+            color="black"
+          />
+          <Text style={styles.textStyle}>Feedback</Text>
+        </View>
+      </TouchableOpacity>
       <View style={styles.settingsText}>
         <MaterialCommunityIcons name="logout" size={28} color="red" />
         <Text style={styles.logoutStyle}>Log Out</Text>

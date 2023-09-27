@@ -89,8 +89,8 @@ function ArtistPage() {
 
   //Functions for the map//
   const [location, setLocation] = useState({
-    latitude: 37.7749, // Replace with the actual latitude
-    longitude: -122.4194, // Replace with the actual longitude
+    latitude: 25.762750, // Replace with the actual latitude
+    longitude: -80.304700, // Replace with the actual longitude
   });
 
   const openAppleMaps = () => {
@@ -215,11 +215,11 @@ function ArtistPage() {
                 </Text>
                 
                 <View style={styles.mapContainer}>
-                <View style={{marginLeft: 3, marginRight: 5}}>
+                <View style={{marginLeft: 3, marginRight: 5, marginTop: 5}}>
                   <Text style={{ fontWeight: 'bold' }}> La Marca Tatuaje</Text>
                   <Text> 6867 Calle Ocho</Text>
                   <Text> Miami, FL 33144</Text>
-                  <View style={{flexDirection:'row', marginTop: 10}}>
+                  <View style={{flexDirection:'row'}}>
                   <Text style={{fontWeight: 'bold'}}> Monday </Text>
                   <Text> 11am - 8pm</Text>
                   </View>
@@ -463,9 +463,11 @@ const styles = StyleSheet.create({
     // Styles for info content
   },
   name: {
-    marginLeft: "40%",
+    marginLeft: "36%",
     marginBottom: 5,
     marginTop: 5,
+    fontWeight: "bold",
+    fontSize: 20,
   },
   photosContainer: {
     marginTop: 10, // Adjust the margin as needed

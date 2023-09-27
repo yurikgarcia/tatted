@@ -2,20 +2,20 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Appbar, Avatar, Card, TextInput } from "react-native-paper";
 
-function Support() {
+function SendFeedback() {
   const primaryColor = "#0DBB80";
 
-  const [userInput, setUserInput] = useState(""); // Initialize review to empty string
+  const [userFeedback, setUserFeedback] = useState(""); // Initialize review to empty string
 
-  console.log(userInput);
+
 
   return (
     <View>
       <Card style={styles.card}>
         <Card.Content>
           <Text variant="bodyMedium">
-          We're always here to assist you! 🤝 If you encounter any issues or have questions about our app, 
-          don't hesitate to reach out to our support team. We're here for you and ready to help! 😊📱 #CustomerSupport
+          We value your opinion! 📱✨ Could you please take a moment to share your feedback on our app? 
+          Your insights help us improve and provide you with an even better experience. Thank you! 🙌 #AppFeedback
           </Text>
         </Card.Content>
       </Card>
@@ -28,9 +28,9 @@ function Support() {
       <TextInput
         activeOutlineColor={primaryColor}
         mode="outlined"
-        label="Description"
-        value={userInput}
-        onChangeText={(text) => setUserInput(text)}
+        label="Feedback"
+        value={userFeedback}
+        onChangeText={(text) => setUserFeedback(text)}
         multiline={true}
         style={{ width: 420, marginLeft: 5, marginTop: 3 }}
       />
@@ -43,7 +43,7 @@ function Support() {
   );
 }
 
-export default Support;
+export default SendFeedback;
 
 const styles = StyleSheet.create({
   card: {

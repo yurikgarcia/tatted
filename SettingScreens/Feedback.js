@@ -17,7 +17,7 @@ function Feedback() {
           <Text style={styles.textStyle}>Contact Support</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Feedback")}>
+      <TouchableOpacity onPress={() => navigation.navigate("SendFeedback")}>
         <View style={styles.settingsText}>
           <MaterialCommunityIcons
             name="thumbs-up-down-outline"

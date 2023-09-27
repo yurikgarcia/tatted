@@ -105,6 +105,9 @@ const App = () => {
   );
 };
 
+
+export default App;
+
 const styles = StyleSheet.create({
   appbarContainer: {
     position: "absolute",
@@ -121,19 +124,17 @@ const styles = StyleSheet.create({
     borderTopColor: "#0DBB80",
     borderTopWidth: 4
   },
+  container: {
+    flex: 1,
+  },
   iconContainer: {
     flex: 1,
-    alignItems: "center",
-  },
-  iconTextContainer: {
     alignItems: "center",
   },
   iconText: {
     fontSize: 12,
   },
-  container: {
-    flex: 1,
+  iconTextContainer: {
+    alignItems: "center",
   },
 });
-
-export default App;

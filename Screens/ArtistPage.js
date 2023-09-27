@@ -9,7 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Appbar, Avatar, Card } from "react-native-paper";
+import { Appbar, Avatar, Card, Button } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { FlatList, Linking } from "react-native";
@@ -89,14 +89,19 @@ function ArtistPage() {
 
   //Functions for the map//
   const [location, setLocation] = useState({
-    latitude: 25.762750, // Replace with the actual latitude
-    longitude: -80.304700, // Replace with the actual longitude
+    latitude: 25.76275, // Replace with the actual latitude
+    longitude: -80.3047, // Replace with the actual longitude
   });
 
+  // const openAppleMaps = () => {
+  //   const { latitude, longitude } = location;
+  //   const url = `http://maps.apple.com/?ll=${latitude},${longitude}`;
+  //   Linking.openURL(url);
+  //   console.log("HIT");
+  // };
+
   const openAppleMaps = () => {
-    const { latitude, longitude } = location;
-    const url = `http://maps.apple.com/?ll=${latitude},${longitude}`;
-    Linking.openURL(url);
+    console.log("Button Pressed BOIIIII"); // Test log
   };
 
   return (
@@ -119,7 +124,6 @@ function ArtistPage() {
               backgroundColor: primaryColor,
               height: 3,
             }}
-            variant="primary"
             style={styles.tab}
           >
             <Tab.Item
@@ -201,7 +205,7 @@ function ArtistPage() {
                 </Text>
                 <Text style={styles.bodyText}>
                   {" "}
-                  Aqui se hacen tremendos tatuajes y  mejores croquetas!
+                  Aqui se hacen tremendos tatuajes y mejores croquetas!
                 </Text>
 
                 <Text
@@ -213,38 +217,41 @@ function ArtistPage() {
                 >
                   TATTOO SHOP
                 </Text>
-                
+
                 <View style={styles.mapContainer}>
-                <View style={{marginLeft: 3, marginRight: 5, marginTop: 5}}>
-                  <Text style={{ fontWeight: 'bold' }}> La Marca Tatuaje</Text>
-                  <Text> 6867 Calle Ocho</Text>
-                  <Text> Miami, FL 33144</Text>
-                  <View style={{flexDirection:'row'}}>
-                  <Text style={{fontWeight: 'bold'}}> Monday </Text>
-                  <Text> 11am - 8pm</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                  <Text style={{fontWeight: 'bold'}}> Tuesday </Text>
-                  <Text> 11am - 8pm</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                  <Text style={{fontWeight: 'bold'}}> Wednesday </Text>
-                  <Text> 11am - 8pm</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                  <Text style={{fontWeight: 'bold'}}> Thursday </Text>
-                  <Text> 11am - 8pm</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                  <Text style={{fontWeight: 'bold'}}> Friday </Text>
-                  <Text> 11am - 8pm</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
-                  <Text style={{fontWeight: 'bold'}}> Saturday </Text>
-                  <Text> 11am - 8pm</Text>
+                  <View style={{ marginLeft: 3, marginRight: 5, marginTop: 5 }}>
+                    <Text style={{ fontWeight: "bold" }}>
+                      {" "}
+                      La Marca Tatuaje
+                    </Text>
+                    <Text> 6867 Calle Ocho</Text>
+                    <Text> Miami, FL 33144</Text>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}> Monday </Text>
+                      <Text> 11am - 8pm</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}> Tuesday </Text>
+                      <Text> 11am - 8pm</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}> Wednesday </Text>
+                      <Text> 11am - 8pm</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}> Thursday </Text>
+                      <Text> 11am - 8pm</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}> Friday </Text>
+                      <Text> 11am - 8pm</Text>
+                    </View>
+                    <View style={{ flexDirection: "row" }}>
+                      <Text style={{ fontWeight: "bold" }}> Saturday </Text>
+                      <Text> 11am - 8pm</Text>
+                    </View>
                   </View>
 
-                </View>
                   <TouchableOpacity
                     style={styles.leftHalf}
                     onPress={openAppleMaps}
@@ -270,6 +277,7 @@ function ArtistPage() {
                     {/* <View style={styles.gradientOverlay} /> */}
                   </TouchableOpacity>
                 </View>
+
                 <Text
                   style={{
                     fontWeight: "bold",
@@ -367,6 +375,8 @@ function ArtistPage() {
   );
 }
 
+export default ArtistPage;
+
 const styles = StyleSheet.create({
   aboutMe: {
     color: "black",
@@ -440,6 +450,15 @@ const styles = StyleSheet.create({
   contentContainer: {
     alignItems: "center",
   },
+  gradientOverlay: {
+    position: "absolute",
+    left: "35%", // Cover 25% of the map's width
+    top: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor:
+      "linear-gradient(90deg, rgba(0, 0, 0, 0.7) 35%, rgba(0, 0, 0, 0) 35%)",
+  },
   iconText: {
     fontSize: 12,
   },
@@ -451,16 +470,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     width: windowWidth / 2,
   },
-  mapContainer: {
-    flex: 0.75,
-    flexDirection: 'row', // Make the parent container a row to split the screen in half
-  },
   imageAccordion: {
     alignItems: "center",
   },
   infoContent: {
     flex: 1,
     // Styles for info content
+  },
+  leftHalf: {
+    flex: 1, // Take up half of the available width
+    backgroundColor: "transparent",
+  },
+  map: {
+    flex: 1,
+  },
+  mapContainer: {
+    flex: 0.75,
+    flexDirection: "row", // Make the parent container a row to split the screen in half
   },
   name: {
     marginLeft: "36%",
@@ -496,22 +522,4 @@ const styles = StyleSheet.create({
   tabItemWhite: {
     backgroundColor: "#FFFBFE", // Add a background color for the selected tab
   },
-  leftHalf: {
-    flex: 1, // Take up half of the available width
-    backgroundColor: "transparent",
-  },
-  map: {
-    flex: 1,
-  },
-  gradientOverlay: {
-    position: "absolute",
-    left: "35%", // Cover 25% of the map's width
-    top: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor:
-      "linear-gradient(90deg, rgba(0, 0, 0, 0.7) 35%, rgba(0, 0, 0, 0) 35%)",
-  },
 });
-
-export default ArtistPage;

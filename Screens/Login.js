@@ -28,32 +28,6 @@ function Login({ navigation }) {
     artistCheck: "",
   });
 
-  const styles = StyleSheet.create({
-    avatarImage: {
-      width: windowWidth / 1,
-      height: 125,
-      marginHorizontal: 5,
-    },
-    container: {
-      flex: 1,
-      justifyContent: "start",
-      alignItems: "center",
-    },
-    switchContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: 10,
-      marginBottom: 10,
-    },
-    tab: {
-      backgroundColor: "#FFFBFE", // Set the background color to white
-      height: 40, // Adjust the height as needed
-      marginTop: 10,
-    },
-    tabItemWhite: {
-      backgroundColor: "#FFFBFE", // Add a background color for the selected tab
-    },
-  });
 
   const handleTabChange = (selectedIndex) => {
     setIndex(selectedIndex);
@@ -63,7 +37,6 @@ function Login({ navigation }) {
     setSegButtonValue(selectedTabValue);
   };
 
- 
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -80,7 +53,6 @@ function Login({ navigation }) {
             backgroundColor: primaryColor,
             height: 3,
           }}
-          variant="primary"
           style={styles.tab} // Apply the styles to the tab
         >
           <Tab.Item
@@ -222,3 +194,30 @@ function Login({ navigation }) {
 }
 
 export default Login;
+
+  const styles = StyleSheet.create({
+    avatarImage: {
+      width: windowWidth / 1,
+      height: 125,
+      marginHorizontal: 5,
+    },
+    container: {
+      flex: 1,
+      justifyContent: "start",
+      alignItems: "center",
+    },
+    switchContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginTop: 10,
+      marginBottom: 10,
+    },
+    tab: {
+      backgroundColor: "#FFFBFE", // Set the background color to white
+      height: 40, // Adjust the height as needed
+      marginTop: 10,
+    },
+    tabItemWhite: {
+      backgroundColor: "#FFFBFE", // Add a background color for the selected tab
+    },
+  });

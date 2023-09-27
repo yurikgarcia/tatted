@@ -46,7 +46,7 @@ function Home() {
           <View style={styles.contentContainer}>
             <Card
               style={[
-                { justifyContent: "center", marginTop: 5 },
+                { justifyContent: "center", marginTop: 5, backgroundColor: "#ffffff"  },
                 styles.cardSize,
               ]}
             >
@@ -100,7 +100,7 @@ function Home() {
           <View style={styles.contentContainer}>
             <Card
               style={[
-                { justifyContent: "center", marginTop: 5 },
+                { justifyContent: "center", marginTop: 5, backgroundColor: "#ffffff"  },
                 styles.cardSize,
               ]}
             >

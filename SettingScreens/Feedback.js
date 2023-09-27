@@ -1,11 +1,21 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Linking } from "react-native";
 import { Appbar, Avatar, Card } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 
 function Feedback() {
   const navigation = useNavigation();
+
+    // Function to open the App Store review page
+    const openAppStoreReview = () => {
+      // Replace 'your-app-id' with your actual app's App Store ID
+      const appStoreUrl = `https://apps.apple.com/us/app/your-app-id`;
+  
+      Linking.openURL(appStoreUrl).catch((err) =>
+        console.error("Error opening App Store:", err)
+      );
+    };
 
   return (
     <View style={styles.container}>
@@ -27,10 +37,12 @@ function Feedback() {
           <Text style={styles.textStyle}> Send Feedback</Text>
         </View>
       </TouchableOpacity>
+      <TouchableOpacity onPress={openAppStoreReview}>
       <View style={styles.settingsText}>
         <MaterialCommunityIcons name="star-outline" size={28} />
-        <Text style={styles.textStyle}>Rated the Tatted App</Text>
+        <Text style={styles.textStyle}>Rate the Tatted App!</Text>
       </View>
+      </TouchableOpacity>
     </View>
   );
 }

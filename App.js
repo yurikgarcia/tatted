@@ -72,7 +72,11 @@ const App = () => {
 
     // use for local developing
   const API = {
-    website: 'http://localhost:3000'
+    website: 'http://localhost:5000'
+  };
+
+  const primaryColors = {
+    primary: "#0DBB80"
   };
 
   useEffect(() => {
@@ -88,7 +92,7 @@ const App = () => {
   }
 
   return (
-    <AppContext.Provider value={{ API }}>
+    <AppContext.Provider value={{ API, primaryColors }}>
     <Provider theme={theme}>
       <View style={styles.container}>
         <NavigationContainer theme={theme}>

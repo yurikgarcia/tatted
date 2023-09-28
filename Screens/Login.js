@@ -1,5 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AppContext from "../AppContext.js";
+import Axios from "axios"; 
 import { Button } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
 import { Switch } from "react-native-paper";
@@ -10,6 +11,8 @@ import { View, Text } from "react-native";
 const windowWidth = Dimensions.get("window").width;
 
 function Login({ navigation }) {
+  const { API } = useContext(AppContext);
+  const { primaryColors } = useContext(AppContext);
   const [segButtonValue, setSegButtonValue] = React.useState("login");
   const [isArtistSwitchOn, setIsArtistSwitchOn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false); //state that allows the user to show imputed password
@@ -29,9 +32,10 @@ function Login({ navigation }) {
     artistCheck: "",
   });
 
-  const { API } = useContext(AppContext);
+
 
   console.log("API", API);
+  console.log("primaryColors", primaryColors);
 
 
   const handleTabChange = (selectedIndex) => {
@@ -42,7 +46,23 @@ function Login({ navigation }) {
     setSegButtonValue(selectedTabValue);
   };
 
-console.log("LOGIN")
+    // Function to make the Axios GET request to fetch users
+    const fetchUsers = async () => {
+      try {
+        const response = await Axios.get(`${API.website}/users`); // Make the GET request
+        const users = response.data; // Extract the data from the response
+        console.log("Fetched users:", users);
+        // You can now work with the 'users' data as needed
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchUsers(); // Call the fetchUsers function when the component mounts
+    }, []); // The empty array [] ensures the effect runs once on mount
+
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <SafeAreaView style={styles.container}>

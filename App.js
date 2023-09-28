@@ -13,6 +13,7 @@ import Feedback from "./SettingScreens/Feedback";
 import Support from "./SettingScreens/Support";
 import SendFeedback from "./SettingScreens/SendFeedback";
 import Chat from "./Screens/Chat";
+import AppContext from "./AppContext";
 import { Provider, Appbar, useTheme } from "react-native-paper";
 import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -69,6 +70,11 @@ const App = () => {
   const theme = useTheme();
   const [isLoading, setIsLoading] = useState(true);
 
+    // use for local developing
+  const API = {
+    website: 'http://localhost:3000'
+  };
+
   useEffect(() => {
     // Simulate a loading delay (e.g., fetching data, initializing app)
     setTimeout(() => {
@@ -82,6 +88,7 @@ const App = () => {
   }
 
   return (
+    <AppContext.Provider value={{ API }}>
     <Provider theme={theme}>
       <View style={styles.container}>
         <NavigationContainer theme={theme}>
@@ -102,6 +109,7 @@ const App = () => {
         </NavigationContainer>
       </View>
     </Provider>
+    </AppContext.Provider>
   );
 };
 

@@ -289,15 +289,9 @@ function ArtistPage() {
                 </Text>
                 <View style={{ flexDirection: "row", marginLeft: 3 }}>
                   <FlatList
-                    data={column1Images}
+                    data={[...column1Images, ...column2Images]} // Combine the data sources
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => (
-                      <Image source={{ uri: item }} style={styles.photo} />
-                    )}
-                  />
-                  <FlatList
-                    data={column2Images}
-                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={2} // Set the number of columns to 2
                     renderItem={({ item }) => (
                       <Image source={{ uri: item }} style={styles.photo} />
                     )}

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import AppContext from "../AppContext.js";
 import { Button } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
 import { Switch } from "react-native-paper";
@@ -28,6 +29,10 @@ function Login({ navigation }) {
     artistCheck: "",
   });
 
+  const { API } = useContext(AppContext);
+
+  console.log("API", API);
+
 
   const handleTabChange = (selectedIndex) => {
     setIndex(selectedIndex);
@@ -37,7 +42,7 @@ function Login({ navigation }) {
     setSegButtonValue(selectedTabValue);
   };
 
-
+console.log("LOGIN")
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <SafeAreaView style={styles.container}>

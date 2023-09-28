@@ -66,8 +66,7 @@ function Login({ navigation }) {
           axios.post(`${API.website}/users`, { users: newUsers })
             .then(res => {
               if (res.status === 200) {
-                // setUsers([...users, newUsers])
-                // setAddUserOpen(false)
+                navigation.navigate("Home");
                 console.log('NEW USER', newUsers)
               }
             })

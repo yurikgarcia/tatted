@@ -42,28 +42,32 @@ function Home() {
       const followers = response.data;
       setFollowingUUID(followers[0].following);
       // console.log("Fetched users:", followers);
+      fetchArtistFollowing(); 
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
-  console.log("Following UUIDs", followingUUID)
+  const fetchArtistFollowing = async () => {
+    console.log("Following UUIDs:", followingUUID);
+    try {
+      // Use Promise.all to make parallel requests for each artistUUID
+      const followingData = await Promise.all(
+        followingUUID.map(async (artistUUID) => {
+          const response = await axios.get(`${API.website}/artistFollowing/${artistUUID}`);
+          return response.data;
+        })
+      );
+      // 'followingData' will be an array of responses from each API call
+      console.log("Fetched following data:", followingData);
+    } catch (error) {
+      console.error("Error fetching following data:", error);
+    }
+  };
+
+console.log("Following UUIDs:", followingUUID)
 
 
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
-
-  
 
   // Call fetchUsers to fetch all users when the component mounts
   useEffect(() => {

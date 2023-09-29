@@ -17,6 +17,7 @@ const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [followingUUID, setFollowingUUID] = useState([]); 
   const { API } = useContext(AppContext);
   const images = [1, 2, 3, 4, 5];
   const navigation = useNavigation();
@@ -33,30 +34,49 @@ function Home() {
   };
 
   
-  // Function to fetch all users from the database using Axios
-  const fetchFollowers = async () => {
+  // Function to fetch the uuids of the artist the logged in user is following
+  const fetchFollowingUUID = async () => {
     const userID = await AsyncStorage.getItem('user_id');
     try {
       const response = await axios.get(`${API.website}/following/${userID}`);
       const followers = response.data;
-      console.log("Fetched users:", followers);
+      setFollowingUUID(followers[0].following);
+      // console.log("Fetched users:", followers);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
+  console.log("Following UUIDs", followingUUID)
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  
+
   // Call fetchUsers to fetch all users when the component mounts
   useEffect(() => {
-    fetchFollowers();
+    fetchFollowingUUID();
   }, []);
 
-  const getUserID = async () => {
-    const userID = await AsyncStorage.getItem('user_id');
-    console.log("User UUID from AsyncStorage", userID);
-  };
+  // const getUserID = async () => {
+  //   const userID = await AsyncStorage.getItem('user_id');
+  //   console.log("User UUID from AsyncStorage", userID);
+  // };
   
-  // Call getUserEmail to retrieve and log the user's email
-  getUserID();
+  // // Call getUserEmail to retrieve and log the user's email
+  // getUserID();
 
 
 

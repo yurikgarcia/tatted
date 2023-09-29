@@ -9,7 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import { Appbar, Avatar, Card, Button } from "react-native-paper";
+import { Appbar, Avatar, Card, Button, Divider } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { FlatList, Linking } from "react-native";
@@ -207,7 +207,7 @@ function ArtistPage() {
                   {" "}
                   Aqui se hacen tremendos tatuajes y mejores croquetas!
                 </Text>
-
+                <Divider style={{ marginTop: 5}} />
                 <Text
                   style={{
                     fontWeight: "bold",
@@ -226,6 +226,7 @@ function ArtistPage() {
                     </Text>
                     <Text> 6867 Calle Ocho</Text>
                     <Text> Miami, FL 33144</Text>
+                    <Divider style={{ marginTop: 5, marginBottom: 5}} />
                     <View style={{ flexDirection: "row" }}>
                       <Text style={{ fontWeight: "bold" }}> Monday </Text>
                       <Text> 11am - 8pm</Text>
@@ -277,7 +278,7 @@ function ArtistPage() {
                     {/* <View style={styles.gradientOverlay} /> */}
                   </TouchableOpacity>
                 </View>
-
+                <Divider style={{ marginTop: 5}} />
                 <Text
                   style={{
                     fontWeight: "bold",
@@ -474,6 +475,7 @@ const styles = StyleSheet.create({
   leftHalf: {
     flex: 1, // Take up half of the available width
     backgroundColor: "transparent",
+    marginBottom: 5,
   },
   map: {
     flex: 1,

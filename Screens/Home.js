@@ -40,7 +40,6 @@ function Home() {
       const response = await axios.get(`${API.website}/following/${userID}`);
       const followers = response.data;
       setFollowingUUID(followers[0].following);
-      // console.log("Fetched users:", followers);
       fetchArtistFollowing();
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -64,22 +63,11 @@ function Home() {
     }
   };
 
-  console.log("Following artist", artistFollowing);
-
-  // Call fetchUsers to fetch all users when the component mounts
   useEffect(() => {
     fetchFollowingUUID();
   }, []);
-
-  // const getUserID = async () => {
-  //   const userID = await AsyncStorage.getItem('user_id');
-  //   console.log("User UUID from AsyncStorage", userID);
-  // };
-
-  // // Call getUserEmail to retrieve and log the user's email
-  // getUserID();
-
-  console.log("Following artist", artistFollowing.first_name);
+  
+console.log(artistFollowing)
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

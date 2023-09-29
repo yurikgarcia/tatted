@@ -33,38 +33,72 @@ function Home() {
     }
   };
 
-  // Function to fetch the uuids of the artist the logged in user is following
-  const fetchFollowingUUID = async () => {
+
+  // const fetchFollowingUUID = async () => {
+  //   const userID = await AsyncStorage.getItem("user_id");
+  //   try {
+  //     const response = await axios.get(`${API.website}/following/${userID}`);
+  //     const followers = response.data;
+  //     setFollowingUUID(followers[0].following);
+  //     fetchArtistFollowing();
+  //   } catch (error) {
+  //     console.error("Error fetching users:", error);
+  //   }
+  // };
+
+  // const fetchArtistFollowing = async () => {
+  //   try {
+  //     // Use Promise.all to make parallel requests for each artistUUID
+  //     const followingData = await Promise.all(
+  //       followingUUID.map(async (artistUUID) => {
+  //         const response = await axios.get(
+  //           `${API.website}/artistFollowing/${artistUUID}`
+  //         );
+  //         return response.data;
+  //       })
+  //     );
+  //     setArtistFollowing(followingData);
+  //   } catch (error) {
+  //     console.error("Error fetching following data:", error);
+  //   }
+  // };
+
+  const fetchFollowingAndArtistFollowing = async () => {
     const userID = await AsyncStorage.getItem("user_id");
     try {
       const response = await axios.get(`${API.website}/following/${userID}`);
       const followers = response.data;
-      setFollowingUUID(followers[0].following);
-      fetchArtistFollowing();
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
-
-  const fetchArtistFollowing = async () => {
-    try {
-      // Use Promise.all to make parallel requests for each artistUUID
+      console.log("followers", followers);
+      const followingUUIDs = followers[0].following;
+  
+      if (!followingUUIDs || !Array.isArray(followingUUIDs) || followingUUIDs.length === 0) {
+        // Handle the case when followingUUIDs is null, not an array, or empty
+        console.error("Invalid or empty followingUUIDs");
+        return;
+      }
+  
       const followingData = await Promise.all(
-        followingUUID.map(async (artistUUID) => {
+        followingUUIDs.map(async (artistUUID) => {
           const response = await axios.get(
             `${API.website}/artistFollowing/${artistUUID}`
           );
           return response.data;
         })
       );
+  
+      setFollowingUUID(followingUUIDs);
       setArtistFollowing(followingData);
     } catch (error) {
-      console.error("Error fetching following data:", error);
+      console.error("Error fetching data:", error);
     }
   };
+  
+  
+  
 
   useEffect(() => {
-    fetchFollowingUUID();
+    // fetchFollowingUUID();
+    fetchFollowingAndArtistFollowing();
   }, []);
 
   console.log("THIS TAKES TOO LONG!!!!", artistFollowing);

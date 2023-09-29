@@ -31,6 +31,7 @@ function ArtistPage() {
   const primaryColor = "#0DBB80";
   const [index, setIndex] = React.useState(0);
   const tabNames = ["info", "reviews"];
+  const { followingUUID } = useContext(AppContext);
 
   const navigation = useNavigation();
 
@@ -261,8 +262,8 @@ function ArtistPage() {
                 </Text>
 
                 <View style={styles.mapContainer}>
-                  <View style={{ marginLeft: 3, marginRight: 5, marginTop: 5 }}>
-                    <Text style={{ fontWeight: "bold" }}>
+                  <View style={{ marginLeft: 2, marginRight: 5, marginTop: 5 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 15.5 }}>
                       {" "}
                       La Marca Tatuaje
                     </Text>

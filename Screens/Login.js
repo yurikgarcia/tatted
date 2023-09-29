@@ -1,12 +1,15 @@
 import React, { useState, useContext, useEffect } from "react";
 import AppContext from "../AppContext.js";
-import axios from "axios"; 
+import axios from "axios";
 import { Button } from "react-native-paper";
 import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
 import { Switch } from "react-native-paper";
 import { Tab } from "@rneui/themed";
 import { TextInput } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -33,11 +36,6 @@ function Login({ navigation }) {
   });
 
 
-
-  // console.log("API", API);
-  // console.log("primaryColors", primaryColors);
-
-
   const handleTabChange = (selectedIndex) => {
     setIndex(selectedIndex);
 
@@ -46,83 +44,91 @@ function Login({ navigation }) {
     setSegButtonValue(selectedTabValue);
   };
 
-    // Function to make the Axios GET request to fetch users
-    // const fetchUsers = async () => {
-    //   try {
-    //     const response = await Axios.get(`${API.website}/users`); // Make the GET request
-    //     const users = response.data; // Extract the data from the response
-    //     // console.log("Fetched users:", users);
-    //     // You can now work with the 'users' data as needed
-    //   } catch (error) {
-    //     console.error("Error fetching users:", error);
-    //   }
-    // };
-
-        /**
-   * adds a new users to the DB based on the state set from the textfields
-   */
-        const addUser = async () => {
-          const newUsers = signUp
-          axios.post(`${API.website}/users`, { users: newUsers })
-            .then(res => {
-              if (res.status === 200) {
-                navigation.navigate("Home");
-                console.log('NEW USER', newUsers)
-              }
-            })
-            .catch(err => {
-              alert('Sorry! Something went wrong. Please try to add User again.')
-              console.log('err', err);
-            })
-        };
-
-    // useEffect(() => {
-    //   fetchUsers(); // Call the fetchUsers function when the component mounts
-    // }, []); // The empty array [] ensures the effect runs once on mount
-
-
+  // Function to make the Axios GET request to fetch users
+  // const fetchUsers = async () => {
+  //   try {
+  //     const response = await Axios.get(`${API.website}/users`); // Make the GET request
+  //     const users = response.data; // Extract the data from the response
+  //     // console.log("Fetched users:", users);
+  //     // You can now work with the 'users' data as needed
+  //   } catch (error) {
+  //     console.error("Error fetching users:", error);
+  //   }
+  // };
 
   /**
-   * verify if the user is logged in
+   * Function that adds a user ater filing out the Sign Up form
    */
-  //check to see if user.user_warehouse is not undefined and console.log"admin" if it is
-  //if user.user_warehouse is undefined then console.log "user"
+  const addUser = async () => {
+    const newUsers = signUp;
+    axios
+      .post(`${API.website}/users`, { users: newUsers })
+      .then((res) => {
+        if (res.status === 200) {
+          navigation.navigate("Home");
+          console.log("NEW USER", newUsers);
+        }
+      })
+      .catch((err) => {
+        alert("Sorry! Something went wrong. Please try to add User again.");
+        console.log("err", err);
+      });
+  };
+
+  // useEffect(() => {
+  //   fetchUsers(); // Call the fetchUsers function when the component mounts
+  // }, []); // The empty array [] ensures the effect runs once on mount
+
+  /**
+   * Function that logs in the user
+   */
 
   const loginUser = async () => {
-    console.log("LOGIN", login.password)
-  axios
-  .post(`${API.website}/login`, {
-      user_email: login.email,
-      user_password: login.password,
-    })
-    .then((res) => {
-      if (res.status === 200) {
-        console.log("HELLLO")
-        // console.log(res.data.token);
-        // const token = res.data.token;
-        // localStorage.setItem("authorization", token);
-        // const user = res.data.user;
-        // console.log("RES.DATA", res.data)
-        // console.log("USER",user)
-        // localStorage.setItem("user_email", user.user_email);
-        // localStorage.setItem("user_first", user.user_first_name);
-        // localStorage.setItem("user_name", user.user_first_name + " " + user.user_last_name);
-        // localStorage.setItem("user_dod", user.user_dod_id);
-        // localStorage.setItem("admin_warehouses", user.admin_warehouses);
-        // localStorage.setItem("admin_organization", user.admin_organization);
-      }
-      // if(localStorage.getItem("authorization") !== undefined && res.data.user.USER_warehouses !== null ) window.location.href = "/home";
-      // else if(localStorage.getItem("authorization") !== undefined && res.data.user.USER_warehouses == null) goToUserDetails(res.data.user);
-      // if(localStorage.getItem("authorization") !== undefined && res.data.user.USER_warehouses !== null ) console.log("GOOD", localStorage)
-      // else if(localStorage.getItem("authorization") !== undefined && res.data.user.USER_warehouses == null) console.log("BAD", localStorage)
-    })
-    .catch((err) => {
-      alert("Sorry! You are not authorized to access this page.");
-      console.log("err", err);
-      console.log('error', err.response.data.message)
-    });
-};
+    axios
+      .post(`${API.website}/login`, {
+        user_email: login.email,
+        user_password: login.password,
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          const token = res.data.token;
+          AsyncStorage.setItem('authorization', token);
+          AsyncStorage.setItem('user_email', res.data.user.email);
+          AsyncStorage.setItem('user_first_name', res.data.user.user_first_name);
+          AsyncStorage.setItem('user_last_name', res.data.user.user_last_name);
+          // const user = res.data.user;
+        }
+        navigation.navigate('Home');
+      })
+      .catch((err) => {
+        alert("Sorry, You are not authorized to access this page!");
+        console.log("err", err);
+        console.log("error", err.response.data.message);
+      });
+  };
 
+  /**
+   * Function that is initiated afer the user logs in to check the values of the AsyncStorage
+   */
+
+  // const getAllAsyncStorageData = async () => {
+  //   try {
+  //     const allKeys = await AsyncStorage.getAllKeys();
+  //     const allData = await AsyncStorage.multiGet(allKeys);
+      
+  //     // Log all key-value pairs
+  //     allData.forEach(([key, value]) => {
+  //       console.log(`${key}:`, value);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error while retrieving data from AsyncStorage:', error);
+  //   }
+  // };
+  
+  // // Call getAllAsyncStorageData to log all data stored in AsyncStorage
+  // getAllAsyncStorageData();
+
+  
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -281,29 +287,29 @@ function Login({ navigation }) {
 
 export default Login;
 
-  const styles = StyleSheet.create({
-    avatarImage: {
-      width: windowWidth / 1,
-      height: 125,
-      marginHorizontal: 5,
-    },
-    container: {
-      flex: 1,
-      justifyContent: "start",
-      alignItems: "center",
-    },
-    switchContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginTop: 10,
-      marginBottom: 10,
-    },
-    tab: {
-      backgroundColor: "#FFFBFE", // Set the background color to white
-      height: 40, // Adjust the height as needed
-      marginTop: 10,
-    },
-    tabItemWhite: {
-      backgroundColor: "#FFFBFE", // Add a background color for the selected tab
-    },
-  });
+const styles = StyleSheet.create({
+  avatarImage: {
+    width: windowWidth / 1,
+    height: 125,
+    marginHorizontal: 5,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "start",
+    alignItems: "center",
+  },
+  switchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  tab: {
+    backgroundColor: "#FFFBFE", // Set the background color to white
+    height: 40, // Adjust the height as needed
+    marginTop: 10,
+  },
+  tabItemWhite: {
+    backgroundColor: "#FFFBFE", // Add a background color for the selected tab
+  },
+});

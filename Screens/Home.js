@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ArtistPage from "./ArtistPage";
 import artist1 from "../assets/artist1.jpg";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -33,6 +34,8 @@ function Home() {
       }
     }
   };
+
+
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

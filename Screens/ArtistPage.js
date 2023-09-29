@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import AppContext from "../AppContext.js";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from "axios";
 import {
   Dimensions,
-  View,
-  Text,
-  StyleSheet,
   Image,
+  StyleSheet,
   SafeAreaView,
   ScrollView,
+  Text,
   TouchableOpacity,
+  View,
 } from "react-native";
 import { Appbar, Avatar, Card, Button, Divider } from "react-native-paper";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { useNavigation } from "@react-navigation/native";
 import { FlatList, Linking } from "react-native";
-import { Tab } from "@rneui/themed";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { FontAwesome } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
+import { Tab } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 
 function ArtistPage() {
+  const { API } = useContext(AppContext);
   const [artistSegvalue, setArtistSegValue] = React.useState("info");
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
@@ -43,6 +47,25 @@ function ArtistPage() {
       }
     }
   };
+
+  /**
+   * Function that adds this artist to the user's favorites list
+   */
+    const addArtistToFavs = async () => {
+      const userID = await AsyncStorage.getItem("user_id");
+      const artistID = await AsyncStorage.getItem("selectedArtist");
+      axios
+        .post(`${API.website}/addToFavs`, { userID, artistID })
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("ADDED ARTIST!");
+          }
+        })
+        .catch((err) => {
+          alert("Sorry! Something went wrong. Please try to add Artist again.");
+          console.log("err", err);
+        });
+    };
 
   useEffect(() => {
     // Fetch random images for column 1
@@ -104,6 +127,23 @@ function ArtistPage() {
     console.log("Button Pressed BOIIIII"); // Test log
   };
 
+  //   const getAllAsyncStorageData = async () => {
+  //   try {
+  //     const allKeys = await AsyncStorage.getAllKeys();
+  //     const allData = await AsyncStorage.multiGet(allKeys);
+      
+  //     // Log all key-value pairs
+  //     allData.forEach(([key, value]) => {
+  //       console.log(`${key}:`, value);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error while retrieving data from AsyncStorage:', error);
+  //   }
+  // };
+
+  //   // // Call getAllAsyncStorageData to log all data stored in AsyncStorage
+  // getAllAsyncStorageData();
+
   return (
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
@@ -143,7 +183,9 @@ function ArtistPage() {
             <ScrollView>
               <View style={styles.infoContent}>
                 <Appbar style={styles.appbar}>
-                  <TouchableOpacity style={styles.iconContainer}>
+                  <TouchableOpacity 
+                  onPress={addArtistToFavs}
+                  style={styles.iconContainer}>
                     <View style={styles.iconTextContainer}>
                       <MaterialCommunityIcons
                         name="account-plus-outline"

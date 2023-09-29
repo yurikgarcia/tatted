@@ -66,8 +66,8 @@ function Home() {
   useEffect(() => {
     fetchFollowingUUID();
   }, []);
-  
-console.log(artistFollowing)
+
+  console.log("THIS TAKES TOO LONG!!!!", artistFollowing);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -130,7 +130,13 @@ console.log(artistFollowing)
                       buttonColor="#504a4b"
                       textColor="#ffffff"
                       style={{ marginTop: 5, marginLeft: 90 }}
-                      onPress={() => navigation.navigate("ArtistPage")}
+                      onPress={async () => {
+                        await AsyncStorage.setItem(
+                          "selectedArtist",
+                          artist[0].user_id
+                        );
+                        navigation.navigate("ArtistPage");
+                      }}
                     >
                       Book Appointment
                     </Button>

@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import AppContext from "../AppContext.js";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
-import { Button } from "react-native-paper";
-import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
-import { Switch } from "react-native-paper";
+import { Button, Switch  } from "react-native-paper";
+import { Dimensions, Image, SafeAreaView, StyleSheet} from "react-native";
 import { Tab } from "@rneui/themed";
 import { TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const windowWidth = Dimensions.get("window").width;
@@ -92,10 +91,12 @@ function Login({ navigation }) {
       .then((res) => {
         if (res.status === 200) {
           const token = res.data.token;
+          // console.log("res", res.data);
           AsyncStorage.setItem('authorization', token);
           AsyncStorage.setItem('user_email', res.data.user.email);
           AsyncStorage.setItem('user_first_name', res.data.user.user_first_name);
           AsyncStorage.setItem('user_last_name', res.data.user.user_last_name);
+          AsyncStorage.setItem('user_id', res.data.user.user_uuid);
           // const user = res.data.user;
         }
         navigation.navigate('Home');

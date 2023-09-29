@@ -1,19 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import AppContext from "../AppContext.js";
+import axios from "axios";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Avatar, Button, Card } from "react-native-paper";
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-  Dimensions,
-} from "react-native";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+import { Dimensions,Image, ScrollView, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ArtistPage from "./ArtistPage";
 import artist1 from "../assets/artist1.jpg";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -21,6 +17,7 @@ const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { API } = useContext(AppContext);
   const images = [1, 2, 3, 4, 5];
   const navigation = useNavigation();
 
@@ -34,6 +31,32 @@ function Home() {
       }
     }
   };
+
+  
+  // Function to fetch all users from the database using Axios
+  const fetchFollowers = async () => {
+    const userID = await AsyncStorage.getItem('user_id');
+    try {
+      const response = await axios.get(`${API.website}/following/${userID}`);
+      const followers = response.data;
+      console.log("Fetched users:", followers);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  // Call fetchUsers to fetch all users when the component mounts
+  useEffect(() => {
+    fetchFollowers();
+  }, []);
+
+  const getUserID = async () => {
+    const userID = await AsyncStorage.getItem('user_id');
+    console.log("User UUID from AsyncStorage", userID);
+  };
+  
+  // Call getUserEmail to retrieve and log the user's email
+  getUserID();
 
 
 

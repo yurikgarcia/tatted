@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../AppContext.js";
 import axios from "axios";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Avatar, Button, Card } from "react-native-paper";
-import { Dimensions,Image, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import ArtistPage from "./ArtistPage";
 import artist1 from "../assets/artist1.jpg";
-
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -17,7 +16,8 @@ const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [followingUUID, setFollowingUUID] = useState([]); 
+  const [followingUUID, setFollowingUUID] = useState([]);
+  const [artistFollowing, setArtistFollowing] = useState([]);
   const { API } = useContext(AppContext);
   const images = [1, 2, 3, 4, 5];
   const navigation = useNavigation();
@@ -33,41 +33,38 @@ function Home() {
     }
   };
 
-  
   // Function to fetch the uuids of the artist the logged in user is following
   const fetchFollowingUUID = async () => {
-    const userID = await AsyncStorage.getItem('user_id');
+    const userID = await AsyncStorage.getItem("user_id");
     try {
       const response = await axios.get(`${API.website}/following/${userID}`);
       const followers = response.data;
       setFollowingUUID(followers[0].following);
       // console.log("Fetched users:", followers);
-      fetchArtistFollowing(); 
+      fetchArtistFollowing();
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
   const fetchArtistFollowing = async () => {
-    console.log("Following UUIDs:", followingUUID);
     try {
       // Use Promise.all to make parallel requests for each artistUUID
       const followingData = await Promise.all(
         followingUUID.map(async (artistUUID) => {
-          const response = await axios.get(`${API.website}/artistFollowing/${artistUUID}`);
+          const response = await axios.get(
+            `${API.website}/artistFollowing/${artistUUID}`
+          );
           return response.data;
         })
       );
-      // 'followingData' will be an array of responses from each API call
-      console.log("Fetched following data:", followingData);
+      setArtistFollowing(followingData);
     } catch (error) {
       console.error("Error fetching following data:", error);
     }
   };
 
-console.log("Following UUIDs:", followingUUID)
-
-
+  console.log("Following artist", artistFollowing);
 
   // Call fetchUsers to fetch all users when the component mounts
   useEffect(() => {
@@ -78,11 +75,11 @@ console.log("Following UUIDs:", followingUUID)
   //   const userID = await AsyncStorage.getItem('user_id');
   //   console.log("User UUID from AsyncStorage", userID);
   // };
-  
+
   // // Call getUserEmail to retrieve and log the user's email
   // getUserID();
 
-
+  console.log("Following artist", artistFollowing.first_name);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -94,166 +91,65 @@ console.log("Following UUIDs:", followingUUID)
             resizeMode="contain"
           />
           <View style={styles.contentContainer}>
-            <Card
-              style={[
-                { justifyContent: "center", marginTop: 5, backgroundColor: "#ffffff"  },
-                styles.cardSize,
-              ]}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.cardTop}>
-                  <View style={styles.circleImage}>
-                    <Card.Cover source={require("../assets/artist1.jpg")} />
-                  </View>
-                  <Card.Title
-                    title="Yurik Garcia"
-                    titleStyle={styles.cardTitle}
-                    subtitle="Blood Gulch Tattoo"
-                  />
-                </View>
-                <Card.Actions>
-                  <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                    <View>
-                      <ScrollView
-                        horizontal
-                        contentContainerStyle={styles.imageAccordion}
-                        showsHorizontalScrollIndicator={false}
-                        pagingEnabled
-                      >
-                        {images.map((index) => (
-                          <Image
-                            key={index}
-                            source={{
-                              uri: `https://picsum.photos/700?random=${index}`,
-                            }}
-                            style={styles.image}
-                          />
-                        ))}
-                      </ScrollView>
+            {artistFollowing.map((artist, index) => (
+              <Card
+                key={index}
+                style={[
+                  {
+                    justifyContent: "center",
+                    marginTop: 5,
+                    backgroundColor: "#ffffff",
+                  },
+                  styles.cardSize,
+                ]}
+              >
+                <View style={styles.cardContent}>
+                  <View style={styles.cardTop}>
+                    <View style={styles.circleImage}>
+                      <Card.Cover source={require("../assets/artist1.jpg")} />
                     </View>
-                  </PanGestureHandler>
-                </Card.Actions>
-                <Card.Content style={{ justifyContent: "center" }}>
-                  <Button
-                    mode="elevated"
-                    buttonColor="#504a4b"
-                    textColor="#ffffff"
-                    style={{ marginTop: 5, marginLeft: 90 }}
-                    onPress={() => navigation.navigate("ArtistPage")}
-                  >
-                    Book Appointment
-                  </Button>
-                </Card.Content>
-              </View>
-            </Card>
-          </View>
-          <View style={styles.contentContainer}>
-            <Card
-              style={[
-                { justifyContent: "center", marginTop: 5, backgroundColor: "#ffffff"  },
-                styles.cardSize,
-              ]}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.cardTop}>
-                  <View style={styles.circleImage}>
-                    <Card.Cover source={require("../assets/artist2.jpg")} />
+                    <Card.Title
+                      title={artist[0].first_name + " " + artist[0].last_name}
+                      titleStyle={styles.cardTitle}
+                      subtitle={artist[0].tattoo_shop}
+                    />
                   </View>
-                  <Card.Title
-                    title="Don Francisco"
-                    titleStyle={styles.cardTitle}
-                    subtitle="Sabado Gigante Tattoo"
-                  />
+                  <Card.Actions>
+                    <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                      <View>
+                        <ScrollView
+                          horizontal
+                          contentContainerStyle={styles.imageAccordion}
+                          showsHorizontalScrollIndicator={false}
+                          pagingEnabled
+                        >
+                          {images.map((imageIndex) => (
+                            <Image
+                              key={imageIndex}
+                              source={{
+                                uri: `https://picsum.photos/700?random=${imageIndex}`,
+                              }}
+                              style={styles.image}
+                            />
+                          ))}
+                        </ScrollView>
+                      </View>
+                    </PanGestureHandler>
+                  </Card.Actions>
+                  <Card.Content style={{ justifyContent: "center" }}>
+                    <Button
+                      mode="elevated"
+                      buttonColor="#504a4b"
+                      textColor="#ffffff"
+                      style={{ marginTop: 5, marginLeft: 90 }}
+                      onPress={() => navigation.navigate("ArtistPage")}
+                    >
+                      Book Appointment
+                    </Button>
+                  </Card.Content>
                 </View>
-                <Card.Actions>
-                  <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                    <View>
-                      <ScrollView
-                        horizontal
-                        contentContainerStyle={styles.imageAccordion}
-                        showsHorizontalScrollIndicator={false}
-                        pagingEnabled
-                      >
-                        {images.map((index) => (
-                          <Image
-                            key={index}
-                            source={{
-                              uri: `https://picsum.photos/700?random=${index}`,
-                            }}
-                            style={styles.image}
-                          />
-                        ))}
-                      </ScrollView>
-                    </View>
-                  </PanGestureHandler>
-                </Card.Actions>
-                <Card.Content style={{ justifyContent: "center" }}>
-                  <Button
-                    mode="elevated"
-                    buttonColor="#504a4b"
-                    textColor="#ffffff"
-                    style={{ marginTop: 5, marginLeft: 90 }}
-                    onPress={() => navigation.navigate("ArtistPage")}
-                  >
-                    Book Appointment
-                  </Button>
-                </Card.Content>
-              </View>
-            </Card>
-          </View>
-          <View style={styles.contentContainer}>
-            <Card
-              style={[
-                { justifyContent: "center", marginTop: 5 },
-                styles.cardSize,
-              ]}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.cardTop}>
-                  <View style={styles.circleImage}>
-                    <Card.Cover source={require("../assets/artist2.jpg")} />
-                  </View>
-                  <Card.Title
-                    title="Cantinflas Garcia"
-                    titleStyle={styles.cardTitle}
-                    subtitle="Hang 'Em High Tattoo"
-                  />
-                </View>
-                <Card.Actions>
-                  <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                    <View>
-                      <ScrollView
-                        horizontal
-                        contentContainerStyle={styles.imageAccordion}
-                        showsHorizontalScrollIndicator={false}
-                        pagingEnabled
-                      >
-                        {images.map((index) => (
-                          <Image
-                            key={index}
-                            source={{
-                              uri: `https://picsum.photos/600?random=${index}`,
-                            }}
-                            style={styles.image}
-                          />
-                        ))}
-                      </ScrollView>
-                    </View>
-                  </PanGestureHandler>
-                </Card.Actions>
-                <Card.Content style={{ justifyContent: "center" }}>
-                  <Button
-                    mode="elevated"
-                    buttonColor="#504a4b"
-                    textColor="#ffffff"
-                    style={{ marginTop: 5, marginLeft: 90 }}
-                    onPress={() => navigation.navigate("ArtistPage")}
-                  >
-                    Book Appointment
-                  </Button>
-                </Card.Content>
-              </View>
-            </Card>
+              </Card>
+            ))}
           </View>
         </View>
       </ScrollView>

@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import AppContext from "../AppContext.js";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { Button, Switch  } from "react-native-paper";
-import { Dimensions, Image, SafeAreaView, StyleSheet} from "react-native";
+import { Button, Switch } from "react-native-paper";
+import { Dimensions, Image, SafeAreaView, StyleSheet } from "react-native";
 import { Tab } from "@rneui/themed";
 import { TextInput } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { View, Text } from "react-native";
-
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -34,7 +33,6 @@ function Login({ navigation }) {
     artistCheck: "false",
   });
 
-
   const handleTabChange = (selectedIndex) => {
     setIndex(selectedIndex);
 
@@ -42,18 +40,6 @@ function Login({ navigation }) {
     const selectedTabValue = tabNames[selectedIndex];
     setSegButtonValue(selectedTabValue);
   };
-
-  // Function to make the Axios GET request to fetch users
-  // const fetchUsers = async () => {
-  //   try {
-  //     const response = await Axios.get(`${API.website}/users`); // Make the GET request
-  //     const users = response.data; // Extract the data from the response
-  //     // console.log("Fetched users:", users);
-  //     // You can now work with the 'users' data as needed
-  //   } catch (error) {
-  //     console.error("Error fetching users:", error);
-  //   }
-  // };
 
   /**
    * Function that adds a user ater filing out the Sign Up form
@@ -74,14 +60,7 @@ function Login({ navigation }) {
       });
   };
 
-  // useEffect(() => {
-  //   fetchUsers(); // Call the fetchUsers function when the component mounts
-  // }, []); // The empty array [] ensures the effect runs once on mount
-
-  /**
-   * Function that logs in the user
-   */
-
+  /*** Function that logs in the user ***/
   const loginUser = async () => {
     axios
       .post(`${API.website}/login`, {
@@ -92,14 +71,17 @@ function Login({ navigation }) {
         if (res.status === 200) {
           const token = res.data.token;
           // console.log("res", res.data);
-          AsyncStorage.setItem('authorization', token);
-          AsyncStorage.setItem('user_email', res.data.user.email);
-          AsyncStorage.setItem('user_first_name', res.data.user.user_first_name);
-          AsyncStorage.setItem('user_last_name', res.data.user.user_last_name);
-          AsyncStorage.setItem('user_id', res.data.user.user_uuid);
+          AsyncStorage.setItem("authorization", token);
+          AsyncStorage.setItem("user_email", res.data.user.email);
+          AsyncStorage.setItem(
+            "user_first_name",
+            res.data.user.user_first_name
+          );
+          AsyncStorage.setItem("user_last_name", res.data.user.user_last_name);
+          AsyncStorage.setItem("user_id", res.data.user.user_uuid);
           // const user = res.data.user;
         }
-        navigation.navigate('Home');
+        navigation.navigate("Home");
       })
       .catch((err) => {
         alert("Sorry, You are not authorized to access this page!");
@@ -116,7 +98,7 @@ function Login({ navigation }) {
   //   try {
   //     const allKeys = await AsyncStorage.getAllKeys();
   //     const allData = await AsyncStorage.multiGet(allKeys);
-      
+
   //     // Log all key-value pairs
   //     allData.forEach(([key, value]) => {
   //       console.log(`${key}:`, value);
@@ -125,11 +107,9 @@ function Login({ navigation }) {
   //     console.error('Error while retrieving data from AsyncStorage:', error);
   //   }
   // };
-  
+
   // // Call getAllAsyncStorageData to log all data stored in AsyncStorage
   // getAllAsyncStorageData();
-
-  
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

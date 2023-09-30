@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../AppContext.js";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import {
   Dimensions,
@@ -20,20 +20,22 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { Tab } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 const windowWidth = Dimensions.get("window").width;
 
 function ArtistPage() {
   const { API } = useContext(AppContext);
+  const primaryColor = "#0DBB80";
+  const tabNames = ["info", "reviews"];
+  const route = useRoute();
+  const { followingUUID } = route.params;
+  const navigation = useNavigation();
   const [artistSegvalue, setArtistSegValue] = React.useState("info");
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
-  const primaryColor = "#0DBB80";
+  const [selectedArtist, setSelectedArtist] = useState([]);
   const [index, setIndex] = React.useState(0);
-  const tabNames = ["info", "reviews"];
-  const { followingUUID } = useContext(AppContext);
-
-  const navigation = useNavigation();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [1, 2, 3, 4, 5];
@@ -49,24 +51,44 @@ function ArtistPage() {
     }
   };
 
+  // Function to make the Axios GET request to fetch users
+  const fetchArtist = async () => {
+    const artistID = followingUUID[0];
+    try {
+      const response = await axios.get(
+        `${API.website}/artist/${followingUUID}`
+      ); // Make the GET request
+      const artist = response.data; // Extract the data from the response
+      // console.log("Fetched Artist:", artist);
+      setSelectedArtist(artist);
+      // You can now work with the 'users' data as needed
+    } catch (error) {
+      console.error("Error Your Artist:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchArtist(); // Call the fetchUsers function when the component mounts
+  }, []); // The empty array [] ensures the effect runs once on mount
+
   /**
    * Function that adds this artist to the user's favorites list
    */
-    const addArtistToFavs = async () => {
-      const userID = await AsyncStorage.getItem("user_id");
-      const artistID = await AsyncStorage.getItem("selectedArtist");
-      axios
-        .post(`${API.website}/addToFavs`, { userID, artistID })
-        .then((res) => {
-          if (res.status === 200) {
-            console.log("ADDED ARTIST!");
-          }
-        })
-        .catch((err) => {
-          alert("Sorry! Something went wrong. Please try to add Artist again.");
-          console.log("err", err);
-        });
-    };
+  const addArtistToFavs = async () => {
+    const userID = await AsyncStorage.getItem("user_id");
+    const artistID = await AsyncStorage.getItem("selectedArtist");
+    axios
+      .post(`${API.website}/addToFavs`, { userID, artistID })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("ADDED ARTIST!");
+        }
+      })
+      .catch((err) => {
+        alert("Sorry! Something went wrong. Please try to add Artist again.");
+        console.log("err", err);
+      });
+  };
 
   useEffect(() => {
     // Fetch random images for column 1
@@ -132,7 +154,7 @@ function ArtistPage() {
   //   try {
   //     const allKeys = await AsyncStorage.getAllKeys();
   //     const allData = await AsyncStorage.multiGet(allKeys);
-      
+
   //     // Log all key-value pairs
   //     allData.forEach(([key, value]) => {
   //       console.log(`${key}:`, value);
@@ -154,7 +176,11 @@ function ArtistPage() {
             style={styles.avatarImage}
           />
         </View>
-        <Text style={styles.name}>Adam Garcia</Text>
+        {selectedArtist.length > 0 && (
+          <Text style={styles.name}>
+            {selectedArtist[0].first_name + " " + selectedArtist[0].last_name}
+          </Text>
+        )}
       </View>
       <SafeAreaView style={styles.content}>
         <View style={styles.segContainer}>
@@ -184,9 +210,10 @@ function ArtistPage() {
             <ScrollView>
               <View style={styles.infoContent}>
                 <Appbar style={styles.appbar}>
-                  <TouchableOpacity 
-                  onPress={addArtistToFavs}
-                  style={styles.iconContainer}>
+                  <TouchableOpacity
+                    onPress={addArtistToFavs}
+                    style={styles.iconContainer}
+                  >
                     <View style={styles.iconTextContainer}>
                       <MaterialCommunityIcons
                         name="account-plus-outline"
@@ -250,7 +277,7 @@ function ArtistPage() {
                   {" "}
                   Aqui se hacen tremendos tatuajes y mejores croquetas!
                 </Text>
-                <Divider style={{ marginTop: 5}} />
+                <Divider style={{ marginTop: 5 }} />
                 <Text
                   style={{
                     fontWeight: "bold",
@@ -269,7 +296,7 @@ function ArtistPage() {
                     </Text>
                     <Text> 6867 Calle Ocho</Text>
                     <Text> Miami, FL 33144</Text>
-                    <Divider style={{ marginTop: 5, marginBottom: 5}} />
+                    <Divider style={{ marginTop: 5, marginBottom: 5 }} />
                     <View style={{ flexDirection: "row" }}>
                       <Text style={{ fontWeight: "bold" }}> Monday </Text>
                       <Text> 11am - 8pm</Text>
@@ -321,7 +348,7 @@ function ArtistPage() {
                     {/* <View style={styles.gradientOverlay} /> */}
                   </TouchableOpacity>
                 </View>
-                <Divider style={{ marginTop: 5}} />
+                <Divider style={{ marginTop: 5 }} />
                 <Text
                   style={{
                     fontWeight: "bold",
@@ -531,7 +558,6 @@ const styles = StyleSheet.create({
     marginLeft: "36%",
     marginBottom: 5,
     marginTop: 5,
-    fontWeight: "bold",
     fontSize: 20,
   },
   photosContainer: {

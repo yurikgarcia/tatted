@@ -6,9 +6,8 @@ import { Avatar, Button, Card } from "react-native-paper";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
-import ArtistPage from "./ArtistPage";
-import artist1 from "../assets/artist1.jpg";
+import { useNavigation, useRoute } from "@react-navigation/native";
+
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -22,6 +21,13 @@ function Home() {
   const images = [1, 2, 3, 4, 5];
   const navigation = useNavigation();
 
+  //pass artistFollowing to ArtistPage
+  // const passArtistFollowing = () => {
+  //   navigation.navigate("ArtistPage", {
+  //     followingUUID: followingUUID,
+  //   });
+  // };
+
   const handleGestureEvent = (event) => {
     if (event.nativeEvent.state === State.END) {
       const { translationX } = event.nativeEvent;
@@ -33,36 +39,7 @@ function Home() {
     }
   };
 
-
-  // const fetchFollowingUUID = async () => {
-  //   const userID = await AsyncStorage.getItem("user_id");
-  //   try {
-  //     const response = await axios.get(`${API.website}/following/${userID}`);
-  //     const followers = response.data;
-  //     setFollowingUUID(followers[0].following);
-  //     fetchArtistFollowing();
-  //   } catch (error) {
-  //     console.error("Error fetching users:", error);
-  //   }
-  // };
-
-  // const fetchArtistFollowing = async () => {
-  //   try {
-  //     // Use Promise.all to make parallel requests for each artistUUID
-  //     const followingData = await Promise.all(
-  //       followingUUID.map(async (artistUUID) => {
-  //         const response = await axios.get(
-  //           `${API.website}/artistFollowing/${artistUUID}`
-  //         );
-  //         return response.data;
-  //       })
-  //     );
-  //     setArtistFollowing(followingData);
-  //   } catch (error) {
-  //     console.error("Error fetching following data:", error);
-  //   }
-  // };
-
+  // function that gets the artists that the user is following
   const fetchFollowingAndArtistFollowing = async () => {
     const userID = await AsyncStorage.getItem("user_id");
     try {
@@ -70,13 +47,16 @@ function Home() {
       const followers = response.data;
       console.log("followers", followers);
       const followingUUIDs = followers[0].following;
-  
-      if (!followingUUIDs || !Array.isArray(followingUUIDs) || followingUUIDs.length === 0) {
-        // Handle the case when followingUUIDs is null, not an array, or empty
+
+      if (
+        !followingUUIDs ||
+        !Array.isArray(followingUUIDs) ||
+        followingUUIDs.length === 0
+      ) {
         console.error("Invalid or empty followingUUIDs");
         return;
       }
-  
+
       const followingData = await Promise.all(
         followingUUIDs.map(async (artistUUID) => {
           const response = await axios.get(
@@ -85,23 +65,17 @@ function Home() {
           return response.data;
         })
       );
-  
       setFollowingUUID(followingUUIDs);
       setArtistFollowing(followingData);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
-  
-  
 
   useEffect(() => {
     // fetchFollowingUUID();
     fetchFollowingAndArtistFollowing();
   }, []);
-
-  console.log("THIS TAKES TOO LONG!!!!", artistFollowing);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -169,7 +143,9 @@ function Home() {
                           "selectedArtist",
                           artist[0].user_id
                         );
-                        navigation.navigate("ArtistPage");
+                        navigation.navigate("ArtistPage", {
+                          followingUUID: followingUUID,
+                        });
                       }}
                     >
                       Book Appointment

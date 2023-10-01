@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import AppContext from "../AppContext.js";
+import axios from "axios";
 import {
   View,
   Text,
@@ -18,11 +20,30 @@ import { useNavigation } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 
 function CustomBottomDrawer({ isVisible, onClose, onSelect }) {
-  console.log("CustomBottomDrawer isVisible:", isVisible);
-
+  const { API } = useContext(AppContext);
   const options = ["Distance", "Star Rating"];
+  const [allArtist, setAllArtist] = useState([]); 
   const [selectedOption, setSelectedOption] = useState("");
 
+    // Function to make the Axios GET request to fetch ALL ARTIST
+    const fetchAllArtists = async () => {
+      try {
+        const response = await axios.get(
+          `${API.website}/allArtist/`
+        );
+        const artists = response.data; 
+        setAllArtist(artists);
+        // console.log("ALL ARTIST", response.data);
+      } catch (error) {
+        console.error("Error Your Artist:", error);
+      }
+    };
+
+    useEffect(() => {
+      fetchAllArtists();
+    }, []);
+
+    console.log("ALL ARTIST", allArtist);
   return (
     <Modal
       isVisible={isVisible}

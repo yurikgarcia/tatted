@@ -58,25 +58,20 @@ function ArtistPage() {
     }
   };
 
-  // Function to make the Axios GET request to fetch users
+  // Function to make the Axios GET request to fetch the selectedARtist
   const fetchArtist = async () => {
     const artistID = followingUUID;
-    console.log("artistID!!!!!!!!!!!!!", artistID);
-    // console.log("artistID!!!!!!!!!!!!!", artistID);
     try {
       const response = await axios.get(
         `${API.website}/artist/${artistID}`
-      ); // Make the GET request
-      const artist = response.data; // Extract the data from the response
-      // console.log("Fetched Artist:", artist);
+      );
+      const artist = response.data; 
       setSelectedArtist(artist);
-      // You can now work with the 'users' data as needed
     } catch (error) {
       console.error("Error Your Artist:", error);
     }
   };
 
-  console.log("selectedArtist", selectedArtist)
 
   /*** Function that ADDS this artist to the user's favorites list ***/
   const addArtistToFavs = async () => {
@@ -86,7 +81,6 @@ function ArtistPage() {
       .post(`${API.website}/addToFavs`, { userID, artistID })
       .then((res) => {
         if (res.status === 200) {
-          console.log("FOLLOWING ARTIST!");
         }
       })
       .catch((err) => {

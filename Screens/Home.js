@@ -2,12 +2,11 @@ import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../AppContext.js";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Avatar, Button, Card } from "react-native-paper";
+import { Avatar, Button, Card, ActivityIndicator } from "react-native-paper";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PanGestureHandler, State } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -18,15 +17,9 @@ function Home() {
   const [followingUUID, setFollowingUUID] = useState([]);
   const [artistFollowing, setArtistFollowing] = useState([]);
   const { API } = useContext(AppContext);
+  const { primaryColors } = useContext(AppContext);
   const images = [1, 2, 3, 4, 5];
   const navigation = useNavigation();
-
-  //pass artistFollowing to ArtistPage
-  // const passArtistFollowing = () => {
-  //   navigation.navigate("ArtistPage", {
-  //     followingUUID: followingUUID,
-  //   });
-  // };
 
   const handleGestureEvent = (event) => {
     if (event.nativeEvent.state === State.END) {
@@ -58,25 +51,30 @@ function Home() {
 
       const followingData = await Promise.all(
         followingUUIDs.map(async (artistUUID) => {
-          const response = await axios.get(
-            `${API.website}/artistFollowing/${artistUUID}`
-          );
-          return response.data;
+          try {
+            const res = await axios.get(
+              `${API.website}/artistFollowing/${artistUUID}`
+            );
+            setArtistFollowing((prevArtistFollowing) => [
+              ...prevArtistFollowing,
+              res.data,
+            ]);
+            return res.data;
+          } catch (error) {
+            console.error(`Error fetching artist ${artistUUID}:`, error);
+            return null; // Handle the error gracefully, you can skip or handle it accordingly
+          }
         })
       );
       setFollowingUUID(followingUUIDs);
-      setArtistFollowing(followingData);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching artists:", error);
     }
   };
 
   useEffect(() => {
-    // fetchFollowingUUID();
     fetchFollowingAndArtistFollowing();
   }, []);
-
-  // console.log("artistFollowing", artistFollowing)
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -88,73 +86,79 @@ function Home() {
             resizeMode="contain"
           />
           <View style={styles.contentContainer}>
-            {artistFollowing.map((artist, index) => (
-              <Card
-                key={index}
-                style={[
-                  {
-                    justifyContent: "center",
-                    marginTop: 5,
-                    backgroundColor: "#ffffff",
-                  },
-                  styles.cardSize,
-                ]}
-              >
-                <View style={styles.cardContent}>
-                  <View style={styles.cardTop}>
-                    <View style={styles.circleImage}>
-                      <Card.Cover source={require("../assets/artist1.jpg")} />
-                    </View>
-                    <Card.Title
-                      title={artist[0].first_name + " " + artist[0].last_name}
-                      titleStyle={styles.cardTitle}
-                      subtitle={artist[0].tattoo_shop}
-                    />
-                  </View>
-                  <Card.Actions>
-                    <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                      <View>
-                        <ScrollView
-                          horizontal
-                          contentContainerStyle={styles.imageAccordion}
-                          showsHorizontalScrollIndicator={false}
-                          pagingEnabled
-                        >
-                          {images.map((imageIndex) => (
-                            <Image
-                              key={imageIndex}
-                              source={{
-                                uri: `https://picsum.photos/700?random=${imageIndex}`,
-                              }}
-                              style={styles.image}
-                            />
-                          ))}
-                        </ScrollView>
+            {artistFollowing.length > 0 ? (
+              artistFollowing.map((artist, index) => (
+                <Card
+                  key={index}
+                  style={[
+                    {
+                      justifyContent: "center",
+                      marginTop: 5,
+                      backgroundColor: "#ffffff",
+                    },
+                    styles.cardSize,
+                  ]}
+                >
+                  <View style={styles.cardContent}>
+                    <View style={styles.cardTop}>
+                      <View style={styles.circleImage}>
+                        <Card.Cover source={require("../assets/artist1.jpg")} />
                       </View>
-                    </PanGestureHandler>
-                  </Card.Actions>
-                  <Card.Content style={{ justifyContent: "center" }}>
-                    <Button
-                      mode="elevated"
-                      buttonColor="#504a4b"
-                      textColor="#ffffff"
-                      style={{ marginTop: 5, marginLeft: 90 }}
-                      onPress={async () => {
-                        await AsyncStorage.setItem(
-                          "selectedArtist",
-                          artist[0].user_id
-                        );
-                        navigation.navigate("ArtistPage", {
-                          selectedArtistUUID: artist[0].user_id,
-                        });
-                      }}
-                    >
-                      Book Appointment
-                    </Button>
-                  </Card.Content>
-                </View>
-              </Card>
-            ))}
+                      {artist[0] && (
+                        <Card.Title
+                          title={artist[0].first_name + " " + artist[0].last_name}
+                          titleStyle={styles.cardTitle}
+                          subtitle={artist[0].tattoo_shop}
+                        />
+                      )}
+                    </View>
+                    <Card.Actions>
+                      <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                        <View>
+                          <ScrollView
+                            horizontal
+                            contentContainerStyle={styles.imageAccordion}
+                            showsHorizontalScrollIndicator={false}
+                            pagingEnabled
+                          >
+                            {images.map((imageIndex) => (
+                              <Image
+                                key={imageIndex}
+                                source={{
+                                  uri: `https://picsum.photos/700?random=${imageIndex}`,
+                                }}
+                                style={styles.image}
+                              />
+                            ))}
+                          </ScrollView>
+                        </View>
+                      </PanGestureHandler>
+                    </Card.Actions>
+                    <Card.Content style={{ justifyContent: "center" }}>
+                      <Button
+                        mode="elevated"
+                        buttonColor="#504a4b"
+                        textColor="#ffffff"
+                        style={{ marginTop: 5, marginLeft: 90 }}
+                        onPress={async () => {
+                          await AsyncStorage.setItem(
+                            "selectedArtist",
+                            artist[0].user_id
+                          );
+                          navigation.navigate("ArtistPage", {
+                            selectedArtistUUID: artist[0].user_id,
+                          });
+                        }}
+                      >
+                        Book Appointment
+                      </Button>
+                    </Card.Content>
+                  </View>
+                </Card>
+              ))
+            ) : (
+              <ActivityIndicator size="large" color={primaryColors.primary} /> 
+            )}
           </View>
         </View>
       </ScrollView>
@@ -165,7 +169,12 @@ function Home() {
 export default Home;
 
 const styles = StyleSheet.create({
-  alignItems: "center",
+  spinner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    size: 'large'
+  },
   avatarImage: {
     height: 75,
     marginHorizontal: 5,
@@ -205,7 +214,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     alignItems: "center",
   },
-  flexDirection: "row",
   image: {
     height: 200,
     marginHorizontal: 5,
@@ -214,21 +222,7 @@ const styles = StyleSheet.create({
   imageAccordion: {
     alignItems: "center",
   },
-  justifyContent: "flex-start",
-  marginHorizontal: 5,
-  marginBottom: 10,
-  marginTop: 20,
-  overflow: "hidden",
   scrollView: {
     flex: 1,
   },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 20,
-    textAlign: "center",
-  },
-  textAlign: "center",
-  textAlign: "left",
-  width: windowWidth / 1,
 });

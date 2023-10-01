@@ -146,7 +146,8 @@ function Home() {
                             artist[0].user_id
                           );
                           navigation.navigate("ArtistPage", {
-                            selectedArtistUUID: artist[0].user_id,
+                            selectedArtistUUID: followingUUID,
+                            followingUUID: followingUUID,
                           });
                         }}
                       >

@@ -29,23 +29,19 @@ function ArtistPage() {
   const primaryColor = "#0DBB80";
   const tabNames = ["info", "reviews"];
   const route = useRoute();
-  const followingUUID  = route.params.selectedArtistUUID;
+  const followingUUID = route.params.selectedArtistUUID;
+
+  const allFollowedArtists = route.params.followingUUID;
   const navigation = useNavigation();
   const [artistSegvalue, setArtistSegValue] = React.useState("info");
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
+  const [isFollowingArtist, setIsFollowingArtist] = useState();
   const [selectedArtist, setSelectedArtist] = useState([]);
-
-  // const selectedArtistUIID = AsyncStorage.getItem("selectedArtist");
+  const [refresh, setRefresh] = useState(false);
   const [index, setIndex] = React.useState(0);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [1, 2, 3, 4, 5];
-
- 
-
-
-
 
   const handleGestureEvent = (event) => {
     if (event.nativeEvent.state === State.END) {
@@ -60,18 +56,15 @@ function ArtistPage() {
 
   // Function to make the Axios GET request to fetch the selectedARtist
   const fetchArtist = async () => {
-    const artistID = followingUUID;
+    const artistID = await AsyncStorage.getItem("selectedArtist");
     try {
-      const response = await axios.get(
-        `${API.website}/artist/${artistID}`
-      );
-      const artist = response.data; 
+      const response = await axios.get(`${API.website}/artist/${artistID}`);
+      const artist = response.data;
       setSelectedArtist(artist);
     } catch (error) {
       console.error("Error Your Artist:", error);
     }
   };
-
 
   /*** Function that ADDS this artist to the user's favorites list ***/
   const addArtistToFavs = async () => {
@@ -89,27 +82,34 @@ function ArtistPage() {
       });
   };
 
-    /*** Function that REMOVES this artist to the user's favorites list ***/
-    const unfollowArtist = async () => {
-      const userID = await AsyncStorage.getItem("user_id");
-      const artistID = await AsyncStorage.getItem("selectedArtist");
-      axios
-        .delete(`${API.website}/unfollowArtist`, { userID, artistID })
-        .then((res) => {
-          if (res.status === 200) {
-            console.log("UNFOLLOWED ARTIST!");
-          }
-        })
-        .catch((err) => {
-          alert("Sorry! Something went wrong. Please try to Remove this Artist again.");
-          console.log("err", err);
-        });
-    };
+  /*** Function that REMOVES this artist to the user's favorites list ***/
+  const unfollowArtist = async () => {
+    const userID = await AsyncStorage.getItem("user_id");
+    const artistID = await AsyncStorage.getItem("selectedArtist");
+    console.log("userID", userID);
+    axios
+      .delete(`${API.website}/unfollowArtist/${userID}/${artistID}`,)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("UNFOLLOWED ARTIST!");
+          // navigation.navigate("ArtistPage");
+        }
+      })
+      .catch((err) => {
+        alert(
+          "Sorry! Something went wrong. Please try to Remove this Artist again."
+        );
+        console.log("err", err);
+      });
+  };
 
   useEffect(() => {
-    fetchArtist(); 
-    fetchRandomImages(5).then((images) => setColumn1Images(images));// Fetch random images for column 1
-  }, []);
+    fetchArtist();
+    fetchRandomImages(5).then((images) => setColumn1Images(images)); 
+    if (refresh) {
+      setRefresh(false);
+    }
+  }, [refresh]);
 
   const fetchRandomImages = async (count) => {
     const images = [];
@@ -163,24 +163,35 @@ function ArtistPage() {
     console.log("Button Pressed BOIIIII"); // Test log
   };
 
-  //   const getAllAsyncStorageData = async () => {
-  //   try {
-  //     const allKeys = await AsyncStorage.getAllKeys();
-  //     const allData = await AsyncStorage.multiGet(allKeys);
+//     const getAllAsyncStorageData = async () => {
+//     try {
+//       const allKeys = await AsyncStorage.getAllKeys();
+//       const allData = await AsyncStorage.multiGet(allKeys);
 
-  //     // Log all key-value pairs
-  //     allData.forEach(([key, value]) => {
-  //       console.log(`${key}:`, value);
-  //     });
-  //   } catch (error) {
-  //     console.error('Error while retrieving data from AsyncStorage:', error);
-  //   }
-  // };
+//       // Log all key-value pairs
+//       allData.forEach(([key, value]) => {
+//         console.log(`${key}:`, value);
+//       });
+//     } catch (error) {
+//       console.error('Error while retrieving data from AsyncStorage:', error);
+//     }
+//   };
 
-  // //   // // Call getAllAsyncStorageData to log all data stored in AsyncStorage
-  // getAllAsyncStorageData();
+//  // Call getAllAsyncStorageData to log all data stored in AsyncStorage
+//   getAllAsyncStorageData();
 
   // console.log('Selected Artist!!!!:', selectedArtist);
+
+  async function checkIfFollowing() {
+    const selectedArtist = await AsyncStorage.getItem("selectedArtist");
+    const isFollowingArtist = allFollowedArtists.includes(selectedArtist);
+    setIsFollowingArtist(isFollowingArtist);
+  }
+  checkIfFollowing();
+
+console.log('isFollowingArtist', isFollowingArtist);
+
+
 
   return (
     <View style={styles.container}>
@@ -225,30 +236,23 @@ function ArtistPage() {
             <ScrollView>
               <View style={styles.infoContent}>
                 <Appbar style={styles.appbar}>
-                  {/* <TouchableOpacity
-                    onPress={addArtistToFavs}
-                    style={styles.iconContainer}
-                  >
-                    <View style={styles.iconTextContainer}>
-                      <MaterialCommunityIcons
-                        name="account-plus-outline"
-                        size={24}
-                        color="black"
-                      />
-                      <Text style={styles.iconText}>ADD</Text>
-                    </View>
-                  </TouchableOpacity> */}
                   <TouchableOpacity
-                    onPress={unfollowArtist}
+                    onPress={isFollowingArtist ? unfollowArtist : addArtistToFavs}
                     style={styles.iconContainer}
                   >
                     <View style={styles.iconTextContainer}>
                       <MaterialCommunityIcons
-                        name="account-remove-outline"
+                        name={
+                          isFollowingArtist
+                            ? "account-remove-outline"
+                            : "account-plus-outline"
+                        }
                         size={24}
                         color="black"
                       />
-                      <Text style={styles.iconText}>REMOVE</Text>
+                      <Text style={styles.iconText}>
+                        {isFollowingArtist ? "REMOVE" : "ADD"}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity

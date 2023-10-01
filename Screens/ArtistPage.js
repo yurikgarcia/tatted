@@ -29,16 +29,23 @@ function ArtistPage() {
   const primaryColor = "#0DBB80";
   const tabNames = ["info", "reviews"];
   const route = useRoute();
-  const { followingUUID } = route.params;
+  const followingUUID  = route.params.selectedArtistUUID;
   const navigation = useNavigation();
   const [artistSegvalue, setArtistSegValue] = React.useState("info");
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
   const [selectedArtist, setSelectedArtist] = useState([]);
+
+  // const selectedArtistUIID = AsyncStorage.getItem("selectedArtist");
   const [index, setIndex] = React.useState(0);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [1, 2, 3, 4, 5];
+
+ 
+
+
+
 
   const handleGestureEvent = (event) => {
     if (event.nativeEvent.state === State.END) {
@@ -53,10 +60,12 @@ function ArtistPage() {
 
   // Function to make the Axios GET request to fetch users
   const fetchArtist = async () => {
-    const artistID = followingUUID[0];
+    const artistID = followingUUID;
+    console.log("artistID!!!!!!!!!!!!!", artistID);
+    // console.log("artistID!!!!!!!!!!!!!", artistID);
     try {
       const response = await axios.get(
-        `${API.website}/artist/${followingUUID}`
+        `${API.website}/artist/${artistID}`
       ); // Make the GET request
       const artist = response.data; // Extract the data from the response
       // console.log("Fetched Artist:", artist);
@@ -67,13 +76,9 @@ function ArtistPage() {
     }
   };
 
-  useEffect(() => {
-    fetchArtist(); // Call the fetchUsers function when the component mounts
-  }, []); // The empty array [] ensures the effect runs once on mount
+  console.log("selectedArtist", selectedArtist)
 
-  /**
-   * Function that adds this artist to the user's favorites list
-   */
+  /*** Function that ADDS this artist to the user's favorites list ***/
   const addArtistToFavs = async () => {
     const userID = await AsyncStorage.getItem("user_id");
     const artistID = await AsyncStorage.getItem("selectedArtist");
@@ -81,7 +86,7 @@ function ArtistPage() {
       .post(`${API.website}/addToFavs`, { userID, artistID })
       .then((res) => {
         if (res.status === 200) {
-          console.log("ADDED ARTIST!");
+          console.log("FOLLOWING ARTIST!");
         }
       })
       .catch((err) => {
@@ -90,12 +95,26 @@ function ArtistPage() {
       });
   };
 
-  useEffect(() => {
-    // Fetch random images for column 1
-    fetchRandomImages(5).then((images) => setColumn1Images(images));
+    /*** Function that REMOVES this artist to the user's favorites list ***/
+    const unfollowArtist = async () => {
+      const userID = await AsyncStorage.getItem("user_id");
+      const artistID = await AsyncStorage.getItem("selectedArtist");
+      axios
+        .delete(`${API.website}/unfollowArtist`, { userID, artistID })
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("UNFOLLOWED ARTIST!");
+          }
+        })
+        .catch((err) => {
+          alert("Sorry! Something went wrong. Please try to Remove this Artist again.");
+          console.log("err", err);
+        });
+    };
 
-    // Fetch random images for column 2
-    fetchRandomImages(5).then((images) => setColumn2Images(images));
+  useEffect(() => {
+    fetchArtist(); 
+    fetchRandomImages(5).then((images) => setColumn1Images(images));// Fetch random images for column 1
   }, []);
 
   const fetchRandomImages = async (count) => {
@@ -164,8 +183,10 @@ function ArtistPage() {
   //   }
   // };
 
-  //   // // Call getAllAsyncStorageData to log all data stored in AsyncStorage
+  // //   // // Call getAllAsyncStorageData to log all data stored in AsyncStorage
   // getAllAsyncStorageData();
+
+  // console.log('Selected Artist!!!!:', selectedArtist);
 
   return (
     <View style={styles.container}>
@@ -210,7 +231,7 @@ function ArtistPage() {
             <ScrollView>
               <View style={styles.infoContent}>
                 <Appbar style={styles.appbar}>
-                  <TouchableOpacity
+                  {/* <TouchableOpacity
                     onPress={addArtistToFavs}
                     style={styles.iconContainer}
                   >
@@ -221,6 +242,19 @@ function ArtistPage() {
                         color="black"
                       />
                       <Text style={styles.iconText}>ADD</Text>
+                    </View>
+                  </TouchableOpacity> */}
+                  <TouchableOpacity
+                    onPress={unfollowArtist}
+                    style={styles.iconContainer}
+                  >
+                    <View style={styles.iconTextContainer}>
+                      <MaterialCommunityIcons
+                        name="account-remove-outline"
+                        size={24}
+                        color="black"
+                      />
+                      <Text style={styles.iconText}>REMOVE</Text>
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -270,12 +304,7 @@ function ArtistPage() {
                   ABOUT
                 </Text>
                 <Text style={styles.bodyText}>
-                  {" "}
-                  Que vuelta acere! Soy tremendo artista paque tu sepas!
-                </Text>
-                <Text style={styles.bodyText}>
-                  {" "}
-                  Aqui se hacen tremendos tatuajes y mejores croquetas!
+                  {selectedArtist.length > 0 && selectedArtist[0].description}
                 </Text>
                 <Divider style={{ marginTop: 5 }} />
                 <Text
@@ -470,9 +499,10 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
   },
-  boyText: {
+  bodyText: {
     marginBottom: 5,
     marginTop: 5,
+    marginLeft: 5,
   },
   bottomContent: {
     backgroundColor: "white", // Adjust the background color as needed

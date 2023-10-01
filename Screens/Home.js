@@ -45,7 +45,6 @@ function Home() {
     try {
       const response = await axios.get(`${API.website}/following/${userID}`);
       const followers = response.data;
-      console.log("followers", followers);
       const followingUUIDs = followers[0].following;
 
       if (
@@ -76,6 +75,8 @@ function Home() {
     // fetchFollowingUUID();
     fetchFollowingAndArtistFollowing();
   }, []);
+
+  // console.log("artistFollowing", artistFollowing)
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -144,7 +145,7 @@ function Home() {
                           artist[0].user_id
                         );
                         navigation.navigate("ArtistPage", {
-                          followingUUID: followingUUID,
+                          selectedArtistUUID: artist[0].user_id,
                         });
                       }}
                     >

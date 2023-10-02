@@ -145,9 +145,11 @@ function Home() {
                             "selectedArtist",
                             artist[0].user_id
                           );
+                          await AsyncStorage.setItem(
+                            "selectedArtistName",
+                            artist[0].first_name + " " + artist[0].last_name
+                          );
                           navigation.navigate("ArtistPage", {
-                            selectedArtistUUID: followingUUID,
-                            followingUUID: followingUUID,
                           });
                         }}
                       >

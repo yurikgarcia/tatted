@@ -29,9 +29,6 @@ function ArtistPage() {
   const primaryColor = "#0DBB80";
   const tabNames = ["info", "reviews"];
   const route = useRoute();
-  const followingUUID = route.params.selectedArtistUUID;
-
-  const allFollowedArtists = route.params.followingUUID;
   const navigation = useNavigation();
   const [artistSegvalue, setArtistSegValue] = React.useState("info");
   const [artistUUIDs, setArtistUUIDs] = useState([]);
@@ -179,19 +176,19 @@ function ArtistPage() {
     console.log("Button Pressed"); // Test log
   };
 
-    const getAllAsyncStorageData = async () => {
-    try {
-      const allKeys = await AsyncStorage.getAllKeys();
-      const allData = await AsyncStorage.multiGet(allKeys);
+  //   const getAllAsyncStorageData = async () => {
+  //   try {
+  //     const allKeys = await AsyncStorage.getAllKeys();
+  //     const allData = await AsyncStorage.multiGet(allKeys);
 
-      // Log all key-value pairs
-      allData.forEach(([key, value]) => {
-        console.log(`${key}:`, value);
-      });
-    } catch (error) {
-      console.error('Error while retrieving data from AsyncStorage:', error);
-    }
-  };
+  //     // Log all key-value pairs
+  //     allData.forEach(([key, value]) => {
+  //       console.log(`${key}:`, value);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error while retrieving data from AsyncStorage:', error);
+  //   }
+  // };
 
  // Call getAllAsyncStorageData to log all data stored in AsyncStorage
   // getAllAsyncStorageData();

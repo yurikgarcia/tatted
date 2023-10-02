@@ -34,6 +34,7 @@ function ArtistPage() {
   const allFollowedArtists = route.params.followingUUID;
   const navigation = useNavigation();
   const [artistSegvalue, setArtistSegValue] = React.useState("info");
+  const [artistUUIDs, setArtistUUIDs] = useState([]);
   const [column1Images, setColumn1Images] = useState([]);
   const [column2Images, setColumn2Images] = useState([]);
   const [isFollowingArtist, setIsFollowingArtist] = useState();
@@ -66,6 +67,19 @@ function ArtistPage() {
     }
   };
 
+   // Function to make the Axios GET request to fetch the UUIDs for all the artists following
+  //This will be used to render the add/remove icons
+  const fetchFollowingUUIDs = async () => {
+    const userID = await AsyncStorage.getItem("user_id");
+    try {
+      const response = await axios.get(`${API.website}/following/${userID}`);
+      const artistUUIDs = response.data[0].following;
+      setArtistUUIDs(artistUUIDs);
+    } catch (error) {
+      console.error("Error Your Artist:", error);
+    }
+  };
+
   /*** Function that ADDS this artist to the user's favorites list ***/
   const addArtistToFavs = async () => {
     const userID = await AsyncStorage.getItem("user_id");
@@ -74,6 +88,7 @@ function ArtistPage() {
       .post(`${API.website}/addToFavs`, { userID, artistID })
       .then((res) => {
         if (res.status === 200) {
+          navigation.navigate("ArtistPage");
         }
       })
       .catch((err) => {
@@ -92,7 +107,7 @@ function ArtistPage() {
       .then((res) => {
         if (res.status === 200) {
           console.log("UNFOLLOWED ARTIST!");
-          // navigation.navigate("ArtistPage");
+          navigation.navigate("ArtistPage");
         }
       })
       .catch((err) => {
@@ -105,6 +120,7 @@ function ArtistPage() {
 
   useEffect(() => {
     fetchArtist();
+    fetchFollowingUUIDs();
     fetchRandomImages(5).then((images) => setColumn1Images(images)); 
     if (refresh) {
       setRefresh(false);
@@ -160,311 +176,308 @@ function ArtistPage() {
   // };
 
   const openAppleMaps = () => {
-    console.log("Button Pressed BOIIIII"); // Test log
+    console.log("Button Pressed"); // Test log
   };
 
-//     const getAllAsyncStorageData = async () => {
-//     try {
-//       const allKeys = await AsyncStorage.getAllKeys();
-//       const allData = await AsyncStorage.multiGet(allKeys);
+    const getAllAsyncStorageData = async () => {
+    try {
+      const allKeys = await AsyncStorage.getAllKeys();
+      const allData = await AsyncStorage.multiGet(allKeys);
 
-//       // Log all key-value pairs
-//       allData.forEach(([key, value]) => {
-//         console.log(`${key}:`, value);
-//       });
-//     } catch (error) {
-//       console.error('Error while retrieving data from AsyncStorage:', error);
-//     }
-//   };
+      // Log all key-value pairs
+      allData.forEach(([key, value]) => {
+        console.log(`${key}:`, value);
+      });
+    } catch (error) {
+      console.error('Error while retrieving data from AsyncStorage:', error);
+    }
+  };
 
-//  // Call getAllAsyncStorageData to log all data stored in AsyncStorage
-//   getAllAsyncStorageData();
+ // Call getAllAsyncStorageData to log all data stored in AsyncStorage
+  // getAllAsyncStorageData();
 
   // console.log('Selected Artist!!!!:', selectedArtist);
 
   async function checkIfFollowing() {
     const selectedArtist = await AsyncStorage.getItem("selectedArtist");
-    const isFollowingArtist = allFollowedArtists.includes(selectedArtist);
+    const isFollowingArtist = artistUUIDs.includes(selectedArtist);
     setIsFollowingArtist(isFollowingArtist);
   }
   checkIfFollowing();
+  
 
-console.log('isFollowingArtist', isFollowingArtist);
-
-
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.avatarContainer}>
-        <View style={styles.avatar}>
-          <Image
-            source={require("../assets/artist2.jpg")}
-            style={styles.avatarImage}
-          />
-        </View>
-        {selectedArtist.length > 0 && (
-          <Text style={styles.name}>
-            {selectedArtist[0].first_name + " " + selectedArtist[0].last_name}
-          </Text>
-        )}
+return (
+  <View style={styles.container}>
+    <View style={styles.avatarContainer}>
+      <View style={styles.avatar}>
+        <Image
+          source={require("../assets/artist2.jpg")}
+          style={styles.avatarImage}
+        />
       </View>
-      <SafeAreaView style={styles.content}>
-        <View style={styles.segContainer}>
-          <Tab
-            value={index}
-            onChange={handleTabChange}
-            indicatorStyle={{
-              backgroundColor: primaryColor,
-              height: 3,
-            }}
-            style={styles.tab}
-          >
-            <Tab.Item
-              title="Information"
-              titleStyle={{ fontSize: 14, color: "black" }}
-              style={index === 0 ? styles.tabItemWhite : null}
-            />
-            <Tab.Item
-              title="Reviews"
-              titleStyle={{ fontSize: 14, color: "black" }}
-              style={index === 1 ? styles.tabItemWhite : null}
-            />
-          </Tab>
-        </View>
-        <View style={styles.bottomContent}>
-          {artistSegvalue === "info" && (
-            <ScrollView>
-              <View style={styles.infoContent}>
-                <Appbar style={styles.appbar}>
-                  <TouchableOpacity
-                    onPress={isFollowingArtist ? unfollowArtist : addArtistToFavs}
-                    style={styles.iconContainer}
-                  >
-                    <View style={styles.iconTextContainer}>
-                      <MaterialCommunityIcons
-                        name={
-                          isFollowingArtist
-                            ? "account-remove-outline"
-                            : "account-plus-outline"
-                        }
-                        size={24}
-                        color="black"
-                      />
-                      <Text style={styles.iconText}>
-                        {isFollowingArtist ? "REMOVE" : "ADD"}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Chat")}
-                    style={styles.iconContainer}
-                  >
-                    <View style={styles.iconTextContainer}>
-                      <MaterialCommunityIcons
-                        name="chat-outline"
-                        size={24}
-                        color="black"
-                      />
-                      <Text style={styles.iconText}>CHAT</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate("Review")}
-                    style={styles.iconContainer}
-                  >
-                    <View style={styles.iconTextContainer}>
-                      <MaterialCommunityIcons
-                        name="star-outline"
-                        size={24}
-                        color="black"
-                      />
-                      <Text style={styles.iconText}>REVIEW</Text>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.iconContainer}>
-                    <View style={styles.iconTextContainer}>
-                      <MaterialCommunityIcons
-                        name="share-outline"
-                        size={24}
-                        color="black"
-                      />
-                      <Text style={styles.iconText}>SHARE</Text>
-                    </View>
-                  </TouchableOpacity>
-                </Appbar>
-
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    marginLeft: 5,
-                  }}
+      {selectedArtist.length > 0 && (
+        <Text style={styles.name}>
+          {selectedArtist[0].first_name + " " + selectedArtist[0].last_name}
+        </Text>
+      )}
+    </View>
+    <SafeAreaView style={styles.content}>
+      <View style={styles.segContainer}>
+        <Tab
+          value={index}
+          onChange={handleTabChange}
+          indicatorStyle={{
+            backgroundColor: primaryColor,
+            height: 3,
+          }}
+          style={styles.tab}
+        >
+          <Tab.Item
+            title="Information"
+            titleStyle={{ fontSize: 14, color: "black" }}
+            style={index === 0 ? styles.tabItemWhite : null}
+          />
+          <Tab.Item
+            title="Reviews"
+            titleStyle={{ fontSize: 14, color: "black" }}
+            style={index === 1 ? styles.tabItemWhite : null}
+          />
+        </Tab>
+      </View>
+      <View style={styles.bottomContent}>
+        {artistSegvalue === "info" && (
+          <ScrollView>
+            <View style={styles.infoContent}>
+              <Appbar style={styles.appbar}>
+                <TouchableOpacity
+                  onPress={isFollowingArtist ? unfollowArtist : addArtistToFavs}
+                  style={styles.iconContainer}
                 >
-                  ABOUT
-                </Text>
-                <Text style={styles.bodyText}>
-                  {selectedArtist.length > 0 && selectedArtist[0].description}
-                </Text>
-                <Divider style={{ marginTop: 5 }} />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    marginTop: 5,
-                    marginLeft: 5,
-                  }}
-                >
-                  TATTOO SHOP
-                </Text>
-
-                <View style={styles.mapContainer}>
-                  <View style={{ marginLeft: 2, marginRight: 5, marginTop: 5 }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 15.5 }}>
-                      {" "}
-                      La Marca Tatuaje
+                  <View style={styles.iconTextContainer}>
+                    <MaterialCommunityIcons
+                      name={
+                        isFollowingArtist
+                          ? "account-remove-outline"
+                          : "account-plus-outline"
+                      }
+                      size={24}
+                      color="black"
+                    />
+                    <Text style={styles.iconText}>
+                      {isFollowingArtist ? "REMOVE" : "ADD"}
                     </Text>
-                    <Text> 6867 Calle Ocho</Text>
-                    <Text> Miami, FL 33144</Text>
-                    <Divider style={{ marginTop: 5, marginBottom: 5 }} />
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}> Monday </Text>
-                      <Text> 11am - 8pm</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}> Tuesday </Text>
-                      <Text> 11am - 8pm</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}> Wednesday </Text>
-                      <Text> 11am - 8pm</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}> Thursday </Text>
-                      <Text> 11am - 8pm</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}> Friday </Text>
-                      <Text> 11am - 8pm</Text>
-                    </View>
-                    <View style={{ flexDirection: "row" }}>
-                      <Text style={{ fontWeight: "bold" }}> Saturday </Text>
-                      <Text> 11am - 8pm</Text>
-                    </View>
                   </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Chat")}
+                  style={styles.iconContainer}
+                >
+                  <View style={styles.iconTextContainer}>
+                    <MaterialCommunityIcons
+                      name="chat-outline"
+                      size={24}
+                      color="black"
+                    />
+                    <Text style={styles.iconText}>CHAT</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Review")}
+                  style={styles.iconContainer}
+                >
+                  <View style={styles.iconTextContainer}>
+                    <MaterialCommunityIcons
+                      name="star-outline"
+                      size={24}
+                      color="black"
+                    />
+                    <Text style={styles.iconText}>REVIEW</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconContainer}>
+                  <View style={styles.iconTextContainer}>
+                    <MaterialCommunityIcons
+                      name="share-outline"
+                      size={24}
+                      color="black"
+                    />
+                    <Text style={styles.iconText}>SHARE</Text>
+                  </View>
+                </TouchableOpacity>
+              </Appbar>
 
-                  <TouchableOpacity
-                    style={styles.leftHalf}
-                    onPress={openAppleMaps}
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  marginLeft: 5,
+                }}
+              >
+                ABOUT
+              </Text>
+              <Text style={styles.bodyText}>
+                {selectedArtist.length > 0 && selectedArtist[0].description}
+              </Text>
+              <Divider style={{ marginTop: 5 }} />
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  marginTop: 5,
+                  marginLeft: 5,
+                }}
+              >
+                TATTOO SHOP
+              </Text>
+
+              <View style={styles.mapContainer}>
+                <View style={{ marginLeft: 2, marginRight: 5, marginTop: 5 }}>
+                  <Text style={{ fontWeight: "bold", fontSize: 15.5 }}>
+                    {" "}
+                    La Marca Tatuaje
+                  </Text>
+                  <Text> 6867 Calle Ocho</Text>
+                  <Text> Miami, FL 33144</Text>
+                  <Divider style={{ marginTop: 5, marginBottom: 5 }} />
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}> Monday </Text>
+                    <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}> Tuesday </Text>
+                    <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}> Wednesday </Text>
+                    <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}> Thursday </Text>
+                    <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}> Friday </Text>
+                    <Text> 11am - 8pm</Text>
+                  </View>
+                  <View style={{ flexDirection: "row" }}>
+                    <Text style={{ fontWeight: "bold" }}> Saturday </Text>
+                    <Text> 11am - 8pm</Text>
+                  </View>
+                </View>
+
+                <TouchableOpacity
+                  style={styles.leftHalf}
+                  onPress={openAppleMaps}
+                >
+                  <MapView
+                    style={styles.map}
+                    region={{
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    }}
                   >
-                    <MapView
-                      style={styles.map}
-                      region={{
+                    <Marker
+                      coordinate={{
                         latitude: location.latitude,
                         longitude: location.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
                       }}
-                    >
-                      <Marker
-                        coordinate={{
-                          latitude: location.latitude,
-                          longitude: location.longitude,
-                        }}
-                        title="Person's Location"
-                        description="Click to open in Apple Maps"
-                      />
-                    </MapView>
-                    {/* <View style={styles.gradientOverlay} /> */}
-                  </TouchableOpacity>
-                </View>
-                <Divider style={{ marginTop: 5 }} />
-                <Text
-                  style={{
-                    fontWeight: "bold",
-                    marginTop: 5,
-                    marginLeft: 5,
-                  }}
-                >
-                  PHOTOS
-                </Text>
-                <View style={{ flexDirection: "row", marginLeft: 3 }}>
-                  <FlatList
-                    data={[...column1Images, ...column2Images]} // Combine the data sources
-                    keyExtractor={(item, index) => index.toString()}
-                    numColumns={2} // Set the number of columns to 2
-                    renderItem={({ item }) => (
-                      <Image source={{ uri: item }} style={styles.photo} />
-                    )}
-                  />
-                </View>
+                      title="Person's Location"
+                      description="Click to open in Apple Maps"
+                    />
+                  </MapView>
+                  {/* <View style={styles.gradientOverlay} /> */}
+                </TouchableOpacity>
               </View>
-            </ScrollView>
-          )}
-          {artistSegvalue === "reviews" && (
-            <View style={styles.reviewsContent}>
-              <View style={styles.contentContainer}>
-                <Card
-                  style={[
-                    { justifyContent: "center", marginTop: 5 },
-                    styles.cardSize,
-                  ]}
-                >
-                  <View style={{ flexDirection: "row", marginLeft: 310 }}>
-                    {renderStars()}
-                  </View>
-                  <View style={styles.cardContent}>
-                    <View style={styles.cardTop}>
-                      <View style={styles.circleImage}>
-                        <Avatar.Text
-                          label="YG"
-                          size={50}
-                          style={{ backgroundColor: "#0DBB" }}
-                          labelStyle={{ fontSize: 24 }}
-                        />
-                      </View>
-                      <Card.Title
-                        title="Yurik Garcia"
-                        subtitle="May 13, 2023 4:30 PM"
-                        titleStyle={styles.cardTitle}
-                      />
-                    </View>
-                    <Card.Content>
-                      <Text>
-                        {" "}
-                        Estes tipo es tremenda fula. La verdad que me hizo
-                        tremenda mierdo. No puedo creer le gran pinga que me
-                        hizo. Tremendo artista.
-                      </Text>
-                    </Card.Content>
-                    <Card.Actions>
-                      <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                        <View>
-                          <ScrollView
-                            horizontal
-                            contentContainerStyle={styles.imageAccordion}
-                            showsHorizontalScrollIndicator={false}
-                            pagingEnabled
-                          >
-                            {images.map((index) => (
-                              <Image
-                                key={index}
-                                source={{
-                                  uri: `https://picsum.photos/700?random=${index}`,
-                                }}
-                                style={styles.image}
-                              />
-                            ))}
-                          </ScrollView>
-                        </View>
-                      </PanGestureHandler>
-                    </Card.Actions>
-                  </View>
-                </Card>
+              <Divider style={{ marginTop: 5 }} />
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  marginTop: 5,
+                  marginLeft: 5,
+                }}
+              >
+                PHOTOS
+              </Text>
+              <View style={{ flexDirection: "row", marginLeft: 3 }}>
+                <FlatList
+                  data={[...column1Images, ...column2Images]} // Combine the data sources
+                  keyExtractor={(item, index) => index.toString()}
+                  numColumns={2} // Set the number of columns to 2
+                  renderItem={({ item }) => (
+                    <Image source={{ uri: item }} style={styles.photo} />
+                  )}
+                />
               </View>
             </View>
-          )}
-        </View>
-      </SafeAreaView>
-    </View>
-  );
+          </ScrollView>
+        )}
+        {artistSegvalue === "reviews" && (
+          <View style={styles.reviewsContent}>
+            <View style={styles.contentContainer}>
+              <Card
+                style={[
+                  { justifyContent: "center", marginTop: 5 },
+                  styles.cardSize,
+                ]}
+              >
+                <View style={{ flexDirection: "row", marginLeft: 310 }}>
+                  {renderStars()}
+                </View>
+                <View style={styles.cardContent}>
+                  <View style={styles.cardTop}>
+                    <View style={styles.circleImage}>
+                      <Avatar.Text
+                        label="YG"
+                        size={50}
+                        style={{ backgroundColor: "#0DBB" }}
+                        labelStyle={{ fontSize: 24 }}
+                      />
+                    </View>
+                    <Card.Title
+                      title="Yurik Garcia"
+                      subtitle="May 13, 2023 4:30 PM"
+                      titleStyle={styles.cardTitle}
+                    />
+                  </View>
+                  <Card.Content>
+                    <Text>
+                      {" "}
+                      Estes tipo es tremenda fula. La verdad que me hizo
+                      tremenda mierdo. No puedo creer le gran pinga que me
+                      hizo. Tremendo artista.
+                    </Text>
+                  </Card.Content>
+                  <Card.Actions>
+                    <PanGestureHandler onGestureEvent={handleGestureEvent}>
+                      <View>
+                        <ScrollView
+                          horizontal
+                          contentContainerStyle={styles.imageAccordion}
+                          showsHorizontalScrollIndicator={false}
+                          pagingEnabled
+                        >
+                          {images.map((index) => (
+                            <Image
+                              key={index}
+                              source={{
+                                uri: `https://picsum.photos/700?random=${index}`,
+                              }}
+                              style={styles.image}
+                            />
+                          ))}
+                        </ScrollView>
+                      </View>
+                    </PanGestureHandler>
+                  </Card.Actions>
+                </View>
+              </Card>
+            </View>
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
+  </View>
+);
 }
 
 export default ArtistPage;

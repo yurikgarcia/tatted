@@ -67,7 +67,7 @@ function ArtistPage() {
       const artist = response.data;
       setSelectedArtist(artist);
     } catch (error) {
-      console.error("Error Your Artist:", error);
+      console.error("Error Fetching Your Artist:", error);
     }
   };
 
@@ -86,14 +86,14 @@ function ArtistPage() {
 
   const fetchReviews = async () => {
     const artistID = await AsyncStorage.getItem("selectedArtist");
-    console.log("artistID", artistID);
+  console.log("REVIEWSSSSSSSSSSSSSSSSSSSSSSSSSS")
     try {
       const response = await axios.get(`${API.website}/getReviews/${artistID}`);
       const artistReviews = response.data;
 
       setReviews(artistReviews);
     } catch (error) {
-      console.error("Error Fetchong Reviews:", error);
+      console.error("Error Fetching Reviews:", error);
     }
   };
 
@@ -220,6 +220,7 @@ function ArtistPage() {
   }
   checkIfFollowing();
 
+
   return (
     <View style={styles.container}>
       <View style={styles.avatarContainer}>
@@ -255,6 +256,7 @@ function ArtistPage() {
               title="Reviews"
               titleStyle={{ fontSize: 14, color: "black" }}
               style={index === 1 ? styles.tabItemWhite : null}
+              onPress={fetchReviews}
             />
           </Tab>
         </View>
@@ -428,69 +430,71 @@ function ArtistPage() {
             </ScrollView>
           )}
           {artistSegvalue === "reviews" && (
-            <View style={styles.reviewsContent}>
-              {reviews.map((review, index) => (
-                <View style={styles.contentContainer}>
-                  <Card
-                    style={[
-                      { justifyContent: "center", marginTop: 5 },
-                      styles.cardSize,
-                    ]}
-                  >
-                    <View style={{ flexDirection: "row", marginLeft: 310 }}>
-                      {renderStars()}
-                    </View>
-                    <View style={styles.cardContent}>
-                      <View style={styles.cardTop}>
-                        <View style={styles.circleImage}>
-                          <Avatar.Text
-                            label="YG"
-                            size={50}
-                            style={{ backgroundColor: "#0DBB" }}
-                            labelStyle={{ fontSize: 24 }}
+            <ScrollView>
+              <View style={styles.reviewsContent}>
+                {
+                reviews.map((review, index) => (
+                  <View style={styles.contentContainer}>
+                    <Card
+                      style={[
+                        { justifyContent: "center", marginTop: 5 },
+                        styles.cardSize,
+                      ]}
+                    >
+                      <View style={{ flexDirection: "row", marginLeft: 310 }}>
+                        {renderStars()}
+                      </View>
+                      <View style={styles.cardContent}>
+                        <View style={styles.cardTop}>
+                          <View style={styles.circleImage}>
+                            <Avatar.Text
+                              label={review.reviewer_first[0] + review.reviewer_last[0]}
+                              size={50}
+                              style={{ backgroundColor: "#0DBB" }}
+                              labelStyle={{ fontSize: 24 }}
+                            />
+                          </View>
+                          <Card.Title
+                            title= {review.reviewer_first + " " + review.reviewer_last}
+                            subtitle={review.date}
+                            titleStyle={styles.cardTitle}
                           />
                         </View>
-                        <Card.Title
-                          title="Yurik Garcia"
-                          subtitle="May 13, 2023 4:30 PM"
-                          titleStyle={styles.cardTitle}
-                        />
+                        <Card.Content>
+                          <Text>
+                            {review.review}
+                          </Text>
+                        </Card.Content>
+                        <Card.Actions>
+                          <PanGestureHandler
+                            onGestureEvent={handleGestureEvent}
+                          >
+                            <View>
+                              <ScrollView
+                                horizontal
+                                contentContainerStyle={styles.imageAccordion}
+                                showsHorizontalScrollIndicator={false}
+                                pagingEnabled
+                              >
+                                {images.map((index) => (
+                                  <Image
+                                    key={index}
+                                    source={{
+                                      uri: `https://picsum.photos/700?random=${index}`,
+                                    }}
+                                    style={styles.image}
+                                  />
+                                ))}
+                              </ScrollView>
+                            </View>
+                          </PanGestureHandler>
+                        </Card.Actions>
                       </View>
-                      <Card.Content>
-                        <Text>
-                          {" "}
-                          Estes tipo es tremenda fula. La verdad que me hizo
-                          tremenda mierdo. No puedo creer le gran pinga que me
-                          hizo. Tremendo artista.
-                        </Text>
-                      </Card.Content>
-                      <Card.Actions>
-                        <PanGestureHandler onGestureEvent={handleGestureEvent}>
-                          <View>
-                            <ScrollView
-                              horizontal
-                              contentContainerStyle={styles.imageAccordion}
-                              showsHorizontalScrollIndicator={false}
-                              pagingEnabled
-                            >
-                              {images.map((index) => (
-                                <Image
-                                  key={index}
-                                  source={{
-                                    uri: `https://picsum.photos/700?random=${index}`,
-                                  }}
-                                  style={styles.image}
-                                />
-                              ))}
-                            </ScrollView>
-                          </View>
-                        </PanGestureHandler>
-                      </Card.Actions>
-                    </View>
-                  </Card>
-                </View>
-              ))}
-            </View>
+                    </Card>
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
           )}
         </View>
       </SafeAreaView>

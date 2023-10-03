@@ -76,9 +76,13 @@ function Home() {
     fetchFollowingAndArtistFollowing();
   }, []);
 
+  const totalCardHeight = artistFollowing.length * 450;
+
+  console.log(artistFollowing);
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={{ minHeight: totalCardHeight }}>
         <View style={styles.container}>
           <Image
             source={require("../assets/logoNoBack.png")}

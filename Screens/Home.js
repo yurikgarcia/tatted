@@ -94,7 +94,7 @@ function Home() {
                     {
                       justifyContent: "center",
                       marginTop: 5,
-                      backgroundColor: "#ffffff",
+                      // backgroundColor: "#ffffff",
                     },
                     styles.cardSize,
                   ]}
